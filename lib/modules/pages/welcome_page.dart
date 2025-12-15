@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sports_news_app/modules/pages/follow_teams_page.dart';
+import 'package:sports_news_app/modules/pages/choose_sports_page.dart';
 import 'dart:math' as math;
 
 import 'package:sports_news_app/widget_tree.dart';
@@ -336,7 +336,7 @@ class _WelcomePageState extends State<WelcomePage>
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => FollowTeamsPage()),
+                MaterialPageRoute(builder: (context) => ChooseSportsPage()),
               );
               // Navigate to sign in
             },
