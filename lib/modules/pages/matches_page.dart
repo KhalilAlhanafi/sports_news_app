@@ -820,14 +820,14 @@ class _MatchesPageState extends State<MatchesPage> {
       decoration: const BoxDecoration(color: Colors.white),
       child: Row(
         children: [
-          IconButton(
+        /*  IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back_ios, color: darkGreen),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-          ),
+          ),*/
           const SizedBox(width: 16),
           const Expanded(
             child: Text(
