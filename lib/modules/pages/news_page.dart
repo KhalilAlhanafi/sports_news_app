@@ -46,7 +46,6 @@ class _NewsPageState extends State<NewsPage> {
   static const Color primaryGreen = Color(0xFF43A047);
   static const Color darkGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF81C784);
-  static const Color backgroundColor = Color(0xFFF5F5F5);
 
   SportType _selectedSport = SportType.all;
   final List<NewsArticle> _allNews = [];
@@ -393,7 +392,7 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -412,17 +411,17 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         children: [
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'Sports News',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -456,7 +455,7 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
 
     return Container(
       height: 50,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -485,12 +484,12 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                   decoration: BoxDecoration(
                     color: isSelected
                         ? _getSportColor(sport.$1)
-                        : Colors.grey[100],
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? _getSportColor(sport.$1)
-                          : Colors.grey[300]!,
+                          : Theme.of(context).colorScheme.outlineVariant,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -499,13 +498,17 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                       Icon(
                         sport.$2,
                         size: 18,
-                        color: isSelected ? Colors.white : Colors.grey[700],
+                        color: isSelected
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         sport.$3,
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey[800],
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -531,7 +534,7 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -566,16 +569,19 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                     children: [
                       Text(
                         _getSportTitle(_selectedSport),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${news.length} news articles',
-                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -608,9 +614,9 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -673,13 +679,19 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Icon(Icons.schedule, size: 14, color: Colors.grey[500]),
+                        Icon(
+                          Icons.schedule,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           _getTimeAgo(article.publishedAt),
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                         const Spacer(),
@@ -689,14 +701,16 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: Theme.of(context).colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             article.sport.toUpperCase(),
                             style: TextStyle(
                               fontSize: 10,
-                              color: Colors.grey[700],
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -707,10 +721,10 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                     // Title
                     Text(
                       article.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                         height: 1.3,
                       ),
                       maxLines: 2,
@@ -722,7 +736,7 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                       article.description,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         height: 1.4,
                       ),
                       maxLines: 3,
@@ -738,14 +752,18 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                             Icon(
                               Icons.person_outline,
                               size: 14,
-                              color: Colors.grey[500],
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               article.author,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey[600],
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -757,28 +775,36 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
                             Icon(
                               Icons.favorite_outline,
                               size: 16,
-                              color: Colors.grey[500],
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${article.likes}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey[600],
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(width: 12),
                             Icon(
                               Icons.comment_outlined,
                               size: 16,
-                              color: Colors.grey[500],
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${article.comments}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey[600],
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
@@ -837,29 +863,32 @@ Head coach Karch Kiraly was pleased with his team\'s performance: "The players e
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: Theme.of(context).colorScheme.surfaceVariant,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 _getSportIcon(_selectedSport),
                 size: 48,
-                color: Colors.grey[400],
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'No News Available',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'No ${_selectedSport != SportType.all ? _getSportTitle(_selectedSport).toLowerCase() : ''} news found at the moment',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

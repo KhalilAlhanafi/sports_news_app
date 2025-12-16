@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sports_news_app/modules/pages/follow_players_page.dart';
+import 'package:sports_news_app/modules/pages/follow_Leagues%20_page.dart';
 
 // Sport Type Enum
 enum SportType { football, basketball, tennis, volleyball }
@@ -1200,7 +1200,7 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -1689,7 +1689,12 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     return ElevatedButton(
       onPressed: _followedTeamIds.isNotEmpty
           ? () {
-              _showSuccessDialog();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FollowLeaguesPage(),
+                ),
+              );
             }
           : null,
       style: ElevatedButton.styleFrom(
@@ -1985,11 +1990,11 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: teams.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 8),
           child: _buildTeamCard(teams[index]),
         );
       },
@@ -2001,23 +2006,23 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     final sportColor = _getSportColor(team.sport);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isFollowing ? sportColor : Colors.grey[200]!,
           width: isFollowing ? 2 : 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isFollowing
-                ? sportColor.withOpacity(0.15)
-                : Colors.black.withOpacity(0.05),
-            blurRadius: isFollowing ? 12 : 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isFollowing
+            ? [
+                BoxShadow(
+                  color: sportColor.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : const [],
       ),
       child: Material(
         color: Colors.transparent,
@@ -2025,7 +2030,7 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
           onTap: () => _toggleFollow(team),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 // Team Logo
@@ -2311,7 +2316,12 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
             ElevatedButton(
               onPressed: _followedTeamIds.isNotEmpty
                   ? () {
-                      _showSuccessDialog();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FollowLeaguesPage(),
+                        ),
+                      );
                     }
                   : null,
               style: ElevatedButton.styleFrom(
@@ -2346,148 +2356,6 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        contentPadding: const EdgeInsets.all(24),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: primaryGreen.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check_circle,
-                color: primaryGreen,
-                size: 60,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Great Choice!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'You\'re now following ${_followedTeamIds.length} teams.\nLet\'s select your favorite players next!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 16),
-            // Sport breakdown
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[50],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: [
-                  _buildFollowingSummaryRow(
-                    Icons.sports_soccer,
-                    'Football',
-                    _footballTeams
-                        .where((t) => _followedTeamIds.contains(t.id))
-                        .length,
-                    _getSportColor(SportType.football),
-                  ),
-                  _buildFollowingSummaryRow(
-                    Icons.sports_basketball,
-                    'Basketball',
-                    _basketballTeams
-                        .where((t) => _followedTeamIds.contains(t.id))
-                        .length,
-                    _getSportColor(SportType.basketball),
-                  ),
-                  _buildFollowingSummaryRow(
-                    Icons.sports_tennis,
-                    'Tennis',
-                    _tennisTeams
-                        .where((t) => _followedTeamIds.contains(t.id))
-                        .length,
-                    _getSportColor(SportType.tennis),
-                  ),
-                  _buildFollowingSummaryRow(
-                    Icons.sports_volleyball,
-                    'Volleyball',
-                    _volleyballTeams
-                        .where((t) => _followedTeamIds.contains(t.id))
-                        .length,
-                    _getSportColor(SportType.volleyball),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // Navigate to follow players page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FollowPlayersPage(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryGreen,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'Follow Players',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFollowingSummaryRow(
-    IconData icon,
-    String sport,
-    int count,
-    Color color,
-  ) {
-    if (count == 0) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: color),
-          const SizedBox(width: 12),
-          Text(sport, style: const TextStyle(fontWeight: FontWeight.w500)),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              '$count',
-              style: TextStyle(color: color, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
       ),
     );
   }

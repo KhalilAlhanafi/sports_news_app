@@ -56,7 +56,6 @@ class LeaguesPage extends StatefulWidget {
 class _LeaguesPageState extends State<LeaguesPage> {
   static const Color primaryGreen = Color(0xFF43A047);
   static const Color darkGreen = Color(0xFF2E7D32);
-  static const Color backgroundColor = Color(0xFFF5F5F5);
 
   SportType _selectedSport = SportType.football;
   final Map<String, bool> _expandedLeagues = {};
@@ -183,14 +182,14 @@ class _LeaguesPageState extends State<LeaguesPage> {
         totalTeams: 20,
         upcomingMatches: [
           Match(
-  id: 'm9',
-  homeTeam: 'Inter',
-  awayTeam: 'AC Milan',
-  homeTeamLogo: '🔵⚫',
-  awayTeamLogo: '🔴⚫',
-  dateTime: DateTime.now().add(const Duration(days: 3, hours: 20)),
-  venue: 'San Siro',
-),
+            id: 'm9',
+            homeTeam: 'Inter',
+            awayTeam: 'AC Milan',
+            homeTeamLogo: '🔵⚫',
+            awayTeamLogo: '🔴⚫',
+            dateTime: DateTime.now().add(const Duration(days: 3, hours: 20)),
+            venue: 'San Siro',
+          ),
           Match(
             id: 'm10',
             homeTeam: 'Juventus',
@@ -211,14 +210,14 @@ class _LeaguesPageState extends State<LeaguesPage> {
         totalTeams: 18,
         upcomingMatches: [
           Match(
-  id: 'm11',
-  homeTeam: 'PSG',
-  awayTeam: 'Marseille',
-  homeTeamLogo: '🔵🔴',
-  awayTeamLogo: '⚪🔵',
-  dateTime: DateTime.now().add(const Duration(days: 2, hours: 21)),
-  venue: 'Parc des Princes',
-),
+            id: 'm11',
+            homeTeam: 'PSG',
+            awayTeam: 'Marseille',
+            homeTeamLogo: '🔵🔴',
+            awayTeamLogo: '⚪🔵',
+            dateTime: DateTime.now().add(const Duration(days: 2, hours: 21)),
+            venue: 'Parc des Princes',
+          ),
         ],
       ),
       League(
@@ -253,23 +252,23 @@ class _LeaguesPageState extends State<LeaguesPage> {
         totalTeams: 30,
         upcomingMatches: [
           Match(
-  id: 'm13',
-  homeTeam: 'Lakers',
-  awayTeam: 'Warriors',
-  homeTeamLogo: '💜💛',
-  awayTeamLogo: '💙💛',
-  dateTime: DateTime.now().add(const Duration(days: 1, hours: 19)),
-  venue: 'Crypto.com Arena',
-),
-Match(
-  id: 'm14',
-  homeTeam: 'Celtics',
-  awayTeam: 'Heat',
-  homeTeamLogo: '🍀',
-  awayTeamLogo: '🔥',
-  dateTime: DateTime.now().add(const Duration(days: 2, hours: 19)),
-  venue: 'TD Garden',
-),
+            id: 'm13',
+            homeTeam: 'Lakers',
+            awayTeam: 'Warriors',
+            homeTeamLogo: '💜💛',
+            awayTeamLogo: '💙💛',
+            dateTime: DateTime.now().add(const Duration(days: 1, hours: 19)),
+            venue: 'Crypto.com Arena',
+          ),
+          Match(
+            id: 'm14',
+            homeTeam: 'Celtics',
+            awayTeam: 'Heat',
+            homeTeamLogo: '🍀',
+            awayTeamLogo: '🔥',
+            dateTime: DateTime.now().add(const Duration(days: 2, hours: 19)),
+            venue: 'TD Garden',
+          ),
           Match(
             id: 'm15',
             homeTeam: 'Bucks',
@@ -290,14 +289,14 @@ Match(
         totalTeams: 18,
         upcomingMatches: [
           Match(
-  id: 'm16',
-  homeTeam: 'Real Madrid',
-  awayTeam: 'Barcelona',
-  homeTeamLogo: '⚪',
-  awayTeamLogo: '🔵🔴',
-  dateTime: DateTime.now().add(const Duration(days: 2, hours: 20)),
-  venue: 'WiZink Center',
-),
+            id: 'm16',
+            homeTeam: 'Real Madrid',
+            awayTeam: 'Barcelona',
+            homeTeamLogo: '⚪',
+            awayTeamLogo: '🔵🔴',
+            dateTime: DateTime.now().add(const Duration(days: 2, hours: 20)),
+            venue: 'WiZink Center',
+          ),
         ],
       ),
       League(
@@ -332,23 +331,23 @@ Match(
         totalTeams: 0,
         upcomingMatches: [
           Match(
-  id: 'm18',
-  homeTeam: 'Djokovic',
-  awayTeam: 'Alcaraz',
-  homeTeamLogo: '🇷🇸',
-  awayTeamLogo: '🇪🇸',
-  dateTime: DateTime.now().add(const Duration(days: 3, hours: 14)),
-  venue: 'Wimbledon',
-),
-Match(
-  id: 'm19',
-  homeTeam: 'Nadal',
-  awayTeam: 'Federer',
-  homeTeamLogo: '🇪🇸',
-  awayTeamLogo: '🇨🇭',
-  dateTime: DateTime.now().add(const Duration(days: 5, hours: 15)),
-  venue: 'Roland Garros',
-),
+            id: 'm18',
+            homeTeam: 'Djokovic',
+            awayTeam: 'Alcaraz',
+            homeTeamLogo: '🇷🇸',
+            awayTeamLogo: '🇪🇸',
+            dateTime: DateTime.now().add(const Duration(days: 3, hours: 14)),
+            venue: 'Wimbledon',
+          ),
+          Match(
+            id: 'm19',
+            homeTeam: 'Nadal',
+            awayTeam: 'Federer',
+            homeTeamLogo: '🇪🇸',
+            awayTeamLogo: '🇨🇭',
+            dateTime: DateTime.now().add(const Duration(days: 5, hours: 15)),
+            venue: 'Roland Garros',
+          ),
         ],
       ),
       League(
@@ -360,14 +359,14 @@ Match(
         totalTeams: 0,
         upcomingMatches: [
           Match(
-  id: 'm20',
-  homeTeam: 'Świątek',
-  awayTeam: 'Sabalenka',
-  homeTeamLogo: '🇵🇱',
-  awayTeamLogo: '🇧🇾',
-  dateTime: DateTime.now().add(const Duration(days: 2, hours: 13)),
-  venue: 'Australian Open',
-),
+            id: 'm20',
+            homeTeam: 'Świątek',
+            awayTeam: 'Sabalenka',
+            homeTeamLogo: '🇵🇱',
+            awayTeamLogo: '🇧🇾',
+            dateTime: DateTime.now().add(const Duration(days: 2, hours: 13)),
+            venue: 'Australian Open',
+          ),
         ],
       ),
     ];
@@ -383,14 +382,14 @@ Match(
         totalTeams: 14,
         upcomingMatches: [
           Match(
-  id: 'm21',
-  homeTeam: 'Perugia',
-  awayTeam: 'Modena',
-  homeTeamLogo: '⚫🟡',
-  awayTeamLogo: '💙💛',
-  dateTime: DateTime.now().add(const Duration(days: 1, hours: 18)),
-  venue: 'PalaBarton',
-),
+            id: 'm21',
+            homeTeam: 'Perugia',
+            awayTeam: 'Modena',
+            homeTeamLogo: '⚫🟡',
+            awayTeamLogo: '💙💛',
+            dateTime: DateTime.now().add(const Duration(days: 1, hours: 18)),
+            venue: 'PalaBarton',
+          ),
         ],
       ),
       League(
@@ -402,14 +401,14 @@ Match(
         totalTeams: 16,
         upcomingMatches: [
           Match(
-  id: 'm22',
-  homeTeam: 'Brazil',
-  awayTeam: 'USA',
-  homeTeamLogo: '🇧🇷',
-  awayTeamLogo: '🇺🇸',
-  dateTime: DateTime.now().add(const Duration(days: 3, hours: 17)),
-  venue: 'Maracanãzinho',
-),
+            id: 'm22',
+            homeTeam: 'Brazil',
+            awayTeam: 'USA',
+            homeTeamLogo: '🇧🇷',
+            awayTeamLogo: '🇺🇸',
+            dateTime: DateTime.now().add(const Duration(days: 3, hours: 17)),
+            venue: 'Maracanãzinho',
+          ),
         ],
       ),
     ];
@@ -471,7 +470,7 @@ Match(
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -490,18 +489,17 @@ Match(
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         children: [
-          
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'Leagues',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -534,7 +532,7 @@ Match(
 
     return Container(
       height: 50,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -563,12 +561,12 @@ Match(
                   decoration: BoxDecoration(
                     color: isSelected
                         ? _getSportColor(sport.$1)
-                        : Colors.grey[100],
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? _getSportColor(sport.$1)
-                          : Colors.grey[300]!,
+                          : Theme.of(context).colorScheme.outlineVariant,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -577,13 +575,17 @@ Match(
                       Icon(
                         sport.$2,
                         size: 18,
-                        color: isSelected ? Colors.white : Colors.grey[700],
+                        color: isSelected
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         sport.$3,
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey[800],
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -609,7 +611,7 @@ Match(
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -644,16 +646,19 @@ Match(
                     children: [
                       Text(
                         '${_getSportTitle(_selectedSport)} Leagues',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${leagues.length} major leagues',
-                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -686,9 +691,9 @@ Match(
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -732,10 +737,10 @@ Match(
                         children: [
                           Text(
                             league.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -766,7 +771,9 @@ Match(
                                 '• ${league.totalTeams} teams',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.grey[600],
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -810,25 +817,31 @@ Match(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 children: [
-                  const Divider(color: Colors.grey, height: 1),
+                  Divider(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                    height: 1,
+                  ),
                   const SizedBox(height: 16),
                   // Upcoming Matches Header
                   Row(
                     children: [
                       Icon(Icons.calendar_today, size: 18, color: sportColor),
                       const SizedBox(width: 8),
-                      const Text(
+                      Text(
                         'Upcoming Matches',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const Spacer(),
                       Text(
                         '${league.upcomingMatches.length} matches',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -885,9 +898,9 @@ Match(
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
       child: Column(
         children: [
@@ -1035,29 +1048,32 @@ Match(
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: Theme.of(context).colorScheme.surfaceVariant,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 _getSportIcon(_selectedSport),
                 size: 48,
-                color: Colors.grey[400],
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'No Leagues Available',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'No ${_getSportTitle(_selectedSport).toLowerCase()} leagues found for now',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

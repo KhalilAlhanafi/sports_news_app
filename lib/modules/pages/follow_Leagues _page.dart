@@ -486,7 +486,7 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -1297,11 +1297,11 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: leagues.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 8),
           child: _buildLeagueCard(leagues[index]),
         );
       },
@@ -1312,23 +1312,23 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
     final isFollowing = _followedLeagueIds.contains(league.id);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isFollowing ? primaryGreen : Colors.grey[200]!,
           width: isFollowing ? 2 : 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isFollowing
-                ? primaryGreen.withOpacity(0.15)
-                : Colors.black.withOpacity(0.05),
-            blurRadius: isFollowing ? 12 : 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isFollowing
+            ? [
+                BoxShadow(
+                  color: primaryGreen.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : const [],
       ),
       child: Material(
         color: Colors.transparent,
@@ -1336,7 +1336,7 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
           onTap: () => _toggleFollow(league),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 // League Logo

@@ -846,7 +846,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -1602,11 +1602,11 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: players.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 8),
           child: _buildPlayerCard(
             players[index],
             showSportBadge: showSportBadge,
@@ -1621,23 +1621,23 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     final sportColor = _getSportColor(player.sport);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isFollowing ? sportColor : Colors.grey[200]!,
           width: isFollowing ? 2 : 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isFollowing
-                ? sportColor.withOpacity(0.15)
-                : Colors.black.withOpacity(0.05),
-            blurRadius: isFollowing ? 12 : 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isFollowing
+            ? [
+                BoxShadow(
+                  color: sportColor.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : const [],
       ),
       child: Material(
         color: Colors.transparent,
@@ -1645,7 +1645,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
           onTap: () => _toggleFollow(player),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 // Player Avatar

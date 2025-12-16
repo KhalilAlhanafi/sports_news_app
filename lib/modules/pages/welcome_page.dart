@@ -70,13 +70,14 @@ class _WelcomePageState extends State<WelcomePage>
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFF5F5F5), Color(0xFFE8F5E9), Colors.white],
+            colors: [scheme.surface, scheme.surfaceVariant, scheme.surface],
           ),
         ),
         child: SafeArea(
@@ -147,12 +148,12 @@ class _WelcomePageState extends State<WelcomePage>
                 ),
               ),
               const SizedBox(width: 10),
-              const Text(
+              Text(
                 'SportsFeed',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: darkGreen,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],
@@ -162,11 +163,7 @@ class _WelcomePageState extends State<WelcomePage>
             onPressed: () {
               _showAdminLoginDialog(context);
             },
-            icon: Icon(
-              Icons.admin_panel_settings,
-              color: adminColor,
-              size: 24,
-            ),
+            icon: Icon(Icons.admin_panel_settings, color: adminColor, size: 24),
             tooltip: 'Admin Login',
           ),
         ],
@@ -183,7 +180,7 @@ class _WelcomePageState extends State<WelcomePage>
         fontSize: fontSize,
         fontWeight: FontWeight.bold,
         height: 1.2,
-        color: const Color(0xFF1A1A1A),
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -194,16 +191,14 @@ class _WelcomePageState extends State<WelcomePage>
       textAlign: centered ? TextAlign.center : TextAlign.left,
       style: TextStyle(
         fontSize: fontSize,
-        color: Colors.grey[600],
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
         height: 1.6,
       ),
     );
   }
 
   // ==================== ACTION BUTTONS ====================
-  Widget _buildActionButtons({
-    bool fullWidth = false,
-  }) {
+  Widget _buildActionButtons({bool fullWidth = false}) {
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 16,
@@ -244,10 +239,7 @@ class _WelcomePageState extends State<WelcomePage>
                 children: [
                   Text(
                     'Get Started',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 8),
                   const Icon(Icons.arrow_forward, size: 20),
@@ -268,20 +260,14 @@ class _WelcomePageState extends State<WelcomePage>
             style: OutlinedButton.styleFrom(
               foregroundColor: primaryGreen,
               side: const BorderSide(color: primaryGreen, width: 2),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
             child: Text(
               'Sign In',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -299,7 +285,7 @@ class _WelcomePageState extends State<WelcomePage>
           'Administrator Access',
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey[600],
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -321,10 +307,7 @@ class _WelcomePageState extends State<WelcomePage>
             icon: const Icon(Icons.admin_panel_settings, size: 20),
             label: const Text(
               'Admin / Super Admin Login',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -437,7 +420,7 @@ class _WelcomePageState extends State<WelcomePage>
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
@@ -463,13 +446,12 @@ class _WelcomePageState extends State<WelcomePage>
   // ==================== FOOTER ====================
   Widget _buildFooter({required bool isDesktop}) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 24,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+        color: Theme.of(context).colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+        ),
       ),
       child: Column(
         children: [
@@ -484,7 +466,10 @@ class _WelcomePageState extends State<WelcomePage>
           const SizedBox(height: 16),
           Text(
             '© 2024 SportsFeed. All rights reserved.',
-            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -517,7 +502,12 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
   final TextEditingController _passwordController = TextEditingController();
   String _selectedRole = 'admin';
   String? _selectedSport;
-  final List<String> _sports = ['Football', 'Basketball', 'Tennis', 'Volleyball'];
+  final List<String> _sports = [
+    'Football',
+    'Basketball',
+    'Tennis',
+    'Volleyball',
+  ];
 
   @override
   void dispose() {
@@ -529,9 +519,7 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -556,10 +544,7 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
                   const SizedBox(width: 12),
                   const Text(
                     'Admin Login',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -653,10 +638,10 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
                     ),
                   ),
                   items: _sports
-                      .map((sport) => DropdownMenuItem(
-                            value: sport,
-                            child: Text(sport),
-                          ))
+                      .map(
+                        (sport) =>
+                            DropdownMenuItem(value: sport, child: Text(sport)),
+                      )
                       .toList(),
                   onChanged: (value) {
                     setState(() {
@@ -684,10 +669,7 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
                   ),
                   child: const Text(
                     'Login',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -701,10 +683,7 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
                   },
                   child: const Text(
                     'Cancel',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
                   ),
                 ),
               ),
@@ -747,9 +726,7 @@ class _AdminLoginDialogState extends State<AdminLoginDialog> {
       backgroundColor: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: isSelected ? color : Colors.grey[300]!,
-        ),
+        side: BorderSide(color: isSelected ? color : Colors.grey[300]!),
       ),
     );
   }
@@ -798,19 +775,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               children: [
                 const Text(
                   'Admin Dashboard',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.userRole == 'super_admin'
                       ? 'Super Admin'
                       : 'Admin - ${widget.assignedSport ?? "No sport assigned"}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
@@ -882,10 +853,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         children: [
           Text(
             'Welcome, ${widget.userRole == 'super_admin' ? 'Super Admin' : 'Admin'}',
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
@@ -943,204 +911,202 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           // Quick Actions
           const Text(
             'Quick Actions',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-          _buildQuickActionButton(
-            'Create New Post',
-            Icons.add_circle,
-            () {},
-          ),
-          _buildQuickActionButton(
-            'Manage Sports',
-            Icons.sports,
-            () {},
-          ),
+          _buildQuickActionButton('Create New Post', Icons.add_circle, () {}),
+          _buildQuickActionButton('Manage Sports', Icons.sports, () {}),
           if (widget.userRole == 'super_admin')
-            _buildQuickActionButton(
-              'Add New Admin',
-              Icons.person_add,
-              () {},
-            ),
+            _buildQuickActionButton('Add New Admin', Icons.person_add, () {}),
         ],
       ),
     );
   }
-Widget _buildPostsTab() {
-  final mockPosts = [
-    {
-      'id': '1',
-      'title': 'Football Championship Final',
-      'sport': 'Football',
-      'time': '2 hours ago',
-      'likes': 245,
-      'author': 'Admin John',
-    },
-    {
-      'id': '2',
-      'title': 'Basketball League Updates',
-      'sport': 'Basketball',
-      'time': '5 hours ago',
-      'likes': 189,
-      'author': 'Admin Mike',
-    },
-    {
-      'id': '3',
-      'title': 'Tennis Tournament Results',
-      'sport': 'Tennis',
-      'time': '1 day ago',
-      'likes': 312,
-      'author': 'Super Admin',
-    },
-    {
-      'id': '4',
-      'title': 'Volleyball Match Highlights',
-      'sport': 'Volleyball',
-      'time': '2 days ago',
-      'likes': 156,
-      'author': 'Admin Sarah',
-    },
-  ];
 
-  return ListView.builder(
-    padding: const EdgeInsets.all(16),
-    itemCount: mockPosts.length,
-    itemBuilder: (context, index) {
-      final post = mockPosts[index];
-      final postSport = post['sport'] as String;
-      final postTitle = post['title'] as String;
-      final postTime = post['time'] as String;
-      final postLikes = post['likes'] as int;
-      final postAuthor = post['author'] as String;
-      
-      final canEdit = widget.userRole == 'super_admin' ||
-          (widget.userRole == 'admin' &&
-              widget.assignedSport == postSport);
+  Widget _buildPostsTab() {
+    final mockPosts = [
+      {
+        'id': '1',
+        'title': 'Football Championship Final',
+        'sport': 'Football',
+        'time': '2 hours ago',
+        'likes': 245,
+        'author': 'Admin John',
+      },
+      {
+        'id': '2',
+        'title': 'Basketball League Updates',
+        'sport': 'Basketball',
+        'time': '5 hours ago',
+        'likes': 189,
+        'author': 'Admin Mike',
+      },
+      {
+        'id': '3',
+        'title': 'Tennis Tournament Results',
+        'sport': 'Tennis',
+        'time': '1 day ago',
+        'likes': 312,
+        'author': 'Super Admin',
+      },
+      {
+        'id': '4',
+        'title': 'Volleyball Match Highlights',
+        'sport': 'Volleyball',
+        'time': '2 days ago',
+        'likes': 156,
+        'author': 'Admin Sarah',
+      },
+    ];
 
-      return Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(16),
-          leading: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: _getSportColor(postSport).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              _getSportIcon(postSport),
-              color: _getSportColor(postSport),
-            ),
-          ),
-          title: Text(
-            postTitle,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                '$postSport • $postTime',
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: mockPosts.length,
+      itemBuilder: (context, index) {
+        final post = mockPosts[index];
+        final postSport = post['sport'] as String;
+        final postTitle = post['title'] as String;
+        final postTime = post['time'] as String;
+        final postLikes = post['likes'] as int;
+        final postAuthor = post['author'] as String;
+
+        final canEdit =
+            widget.userRole == 'super_admin' ||
+            (widget.userRole == 'admin' && widget.assignedSport == postSport);
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(16),
+            leading: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _getSportColor(postSport).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(Icons.thumb_up, size: 14, color: Colors.grey[500]),
-                  const SizedBox(width: 4),
-                  Text(
-                    '$postLikes likes',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-                  const SizedBox(width: 12),
-                  Icon(Icons.person, size: 14, color: Colors.grey[500]),
-                  const SizedBox(width: 4),
-                  Text(
-                    postAuthor,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-                ],
+              child: Icon(
+                _getSportIcon(postSport),
+                color: _getSportColor(postSport),
               ),
-            ],
-          ),
-          trailing: canEdit
-              ? PopupMenuButton(
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Edit'),
+            ),
+            title: Text(
+              postTitle,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 4),
+                Text(
+                  '$postSport • $postTime',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.thumb_up, size: 14, color: Colors.grey[500]),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$postLikes likes',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Delete'),
+                    const SizedBox(width: 12),
+                    Icon(Icons.person, size: 14, color: Colors.grey[500]),
+                    const SizedBox(width: 4),
+                    Text(
+                      postAuthor,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
                   ],
-                )
-              : null,
-        ),
-      );
-    },
-  );
-}
-Widget _buildSportsTab() {
-  final mockSports = [
-    {'name': 'Football', 'posts': 45, 'leagues': 12, 'icon': Icons.sports_soccer},
-    {'name': 'Basketball', 'posts': 32, 'leagues': 8, 'icon': Icons.sports_basketball},
-    {'name': 'Tennis', 'posts': 28, 'leagues': 6, 'icon': Icons.sports_tennis},
-    {'name': 'Volleyball', 'posts': 22, 'leagues': 5, 'icon': Icons.sports_volleyball},
-  ];
+                ),
+              ],
+            ),
+            trailing: canEdit
+                ? PopupMenuButton(
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
+                    ],
+                  )
+                : null,
+          ),
+        );
+      },
+    );
+  }
 
-  return ListView.builder(
-    padding: const EdgeInsets.all(16),
-    itemCount: mockSports.length,
-    itemBuilder: (context, index) {
-      final sport = mockSports[index];
-      final sportName = sport['name'] as String;
-      final sportIcon = sport['icon'] as IconData;
-      final posts = sport['posts'] as int;
-      final leagues = sport['leagues'] as int;
-      
-      return Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(16),
-          leading: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: _getSportColor(sportName).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+  Widget _buildSportsTab() {
+    final mockSports = [
+      {
+        'name': 'Football',
+        'posts': 45,
+        'leagues': 12,
+        'icon': Icons.sports_soccer,
+      },
+      {
+        'name': 'Basketball',
+        'posts': 32,
+        'leagues': 8,
+        'icon': Icons.sports_basketball,
+      },
+      {
+        'name': 'Tennis',
+        'posts': 28,
+        'leagues': 6,
+        'icon': Icons.sports_tennis,
+      },
+      {
+        'name': 'Volleyball',
+        'posts': 22,
+        'leagues': 5,
+        'icon': Icons.sports_volleyball,
+      },
+    ];
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: mockSports.length,
+      itemBuilder: (context, index) {
+        final sport = mockSports[index];
+        final sportName = sport['name'] as String;
+        final sportIcon = sport['icon'] as IconData;
+        final posts = sport['posts'] as int;
+        final leagues = sport['leagues'] as int;
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(16),
+            leading: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _getSportColor(sportName).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(sportIcon, color: _getSportColor(sportName)),
             ),
-            child: Icon(
-              sportIcon,
-              color: _getSportColor(sportName),
+            title: Text(
+              sportName,
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
+            subtitle: Row(
+              children: [
+                _buildSportStat('Posts', posts),
+                const SizedBox(width: 16),
+                _buildSportStat('Leagues', leagues),
+              ],
+            ),
+            trailing: widget.userRole == 'super_admin'
+                ? IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+                : null,
           ),
-          title: Text(
-            sportName,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          subtitle: Row(
-            children: [
-              _buildSportStat('Posts', posts),
-              const SizedBox(width: 16),
-              _buildSportStat('Leagues', leagues),
-            ],
-          ),
-          trailing: widget.userRole == 'super_admin'
-              ? IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit),
-                )
-              : null,
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   Widget _buildAdminsTab() {
     final mockAdmins = [
@@ -1194,10 +1160,7 @@ Widget _buildSportsTab() {
                   contentPadding: const EdgeInsets.all(16),
                   leading: CircleAvatar(
                     backgroundColor: _adminColor.withOpacity(0.1),
-                    child: Icon(
-                      Icons.person,
-                      color: _adminColor,
-                    ),
+                    child: Icon(Icons.person, color: _adminColor),
                   ),
                   title: Text(
                     admin['name']!,
@@ -1217,8 +1180,9 @@ Widget _buildSportsTab() {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: _getSportColor(admin['sport']!)
-                                  .withOpacity(0.1),
+                              color: _getSportColor(
+                                admin['sport']!,
+                              ).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -1257,10 +1221,7 @@ Widget _buildSportsTab() {
                   ),
                   trailing: PopupMenuButton(
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
+                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
                       const PopupMenuItem(
                         value: 'deactivate',
                         child: Text('Deactivate'),
@@ -1280,7 +1241,12 @@ Widget _buildSportsTab() {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -1318,7 +1284,11 @@ Widget _buildSportsTab() {
     );
   }
 
-  Widget _buildQuickActionButton(String title, IconData icon, VoidCallback onTap) {
+  Widget _buildQuickActionButton(
+    String title,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
@@ -1330,10 +1300,7 @@ Widget _buildSportsTab() {
           ),
           child: Icon(icon, color: _adminColor),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),
@@ -1344,16 +1311,10 @@ Widget _buildSportsTab() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(color: Colors.grey[600], fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
         Text(
           value.toString(),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sports_news_app/data/notifiers.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
@@ -9,16 +10,14 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
   static const Color primaryGreen = Color(0xFF43A047);
-  static const Color darkGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF81C784);
-  static const Color backgroundColor = Color(0xFFF5F5F5);
 
   // User data
   String _userName = "John Smith";
   String _userEmail = "john.smith@example.com";
   String _userPhone = "+1 (555) 123-4567";
   String _userBio = "Sports enthusiast | Football fan | NBA lover";
-  
+
   // Settings
   bool _notificationsEnabled = true;
   bool _darkModeEnabled = false;
@@ -27,13 +26,47 @@ class _MorePageState extends State<MorePage> {
   String _selectedLanguage = "English";
   String _selectedFavoriteSport = "Football";
 
-  final List<String> _languages = ["English", "Spanish", "French", "Arabic", "German"];
-  final List<String> _sports = ["Football", "Basketball", "Tennis", "Volleyball", "All Sports"];
+  final List<String> _languages = [
+    "English",
+    "Spanish",
+    "French",
+    "Arabic",
+    "German",
+  ];
+  final List<String> _sports = [
+    "Football",
+    "Basketball",
+    "Tennis",
+    "Volleyball",
+    "All Sports",
+  ];
+
+  late final VoidCallback _darkModeListener;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _darkModeEnabled = isDarkModeNotifier.value;
+    _darkModeListener = () {
+      if (!mounted) return;
+      setState(() {
+        _darkModeEnabled = isDarkModeNotifier.value;
+      });
+    };
+    isDarkModeNotifier.addListener(_darkModeListener);
+  }
+
+  @override
+  void dispose() {
+    isDarkModeNotifier.removeListener(_darkModeListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -57,18 +90,17 @@ class _MorePageState extends State<MorePage> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         children: [
-          
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'Profile & Settings',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -96,7 +128,7 @@ class _MorePageState extends State<MorePage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -140,10 +172,10 @@ class _MorePageState extends State<MorePage> {
                     children: [
                       Text(
                         _userName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -153,7 +185,7 @@ class _MorePageState extends State<MorePage> {
                         _userEmail,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -163,7 +195,7 @@ class _MorePageState extends State<MorePage> {
                         _userBio,
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[700],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -256,9 +288,11 @@ class _MorePageState extends State<MorePage> {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey[50],
+            color: Theme.of(context).colorScheme.surfaceVariant,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[200]!),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
           ),
           child: Row(
             children: [
@@ -269,9 +303,7 @@ class _MorePageState extends State<MorePage> {
                   color: primaryGreen.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Icon(icon, color: primaryGreen, size: 20),
-                ),
+                child: Center(child: Icon(icon, color: primaryGreen, size: 20)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -282,16 +314,16 @@ class _MorePageState extends State<MorePage> {
                       title,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       value,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -299,11 +331,18 @@ class _MorePageState extends State<MorePage> {
                   ],
                 ),
               ),
+              const SizedBox(width: 12),
               if (showChevron)
-                Icon(Icons.chevron_right, color: Colors.grey[400])
+                Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                )
               else
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: primaryGreen.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -328,7 +367,7 @@ class _MorePageState extends State<MorePage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -357,13 +396,13 @@ class _MorePageState extends State<MorePage> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Settings',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -399,6 +438,8 @@ class _MorePageState extends State<MorePage> {
                     setState(() {
                       _darkModeEnabled = value;
                     });
+
+                    setDarkMode(value);
                   },
                 ),
                 const SizedBox(height: 12),
@@ -496,118 +537,120 @@ class _MorePageState extends State<MorePage> {
   }
 
   Widget _buildSettingItem({
-  required IconData icon,
-  required String title,
-  required String subtitle,
-  bool isSwitch = false,
-  bool isDropdown = false,
-  bool isAction = false,
-  bool? value,
-  String? dropdownValue,
-  List<String>? items,
-  Function(bool)? onChanged,
-  Function(String)? onChangedDropdown,
-  VoidCallback? onTap,
-}) {
-  return Material(
-    color: Colors.transparent,
-    child: InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.grey[50],
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[200]!),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: primaryGreen.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Icon(icon, color: primaryGreen, size: 20),
-              ),
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    bool isSwitch = false,
+    bool isDropdown = false,
+    bool isAction = false,
+    bool? value,
+    String? dropdownValue,
+    List<String>? items,
+    Function(bool)? onChanged,
+    Function(String)? onChangedDropdown,
+    VoidCallback? onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outlineVariant,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            if (isSwitch && value != null)
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeColor: primaryGreen,
-                activeTrackColor: primaryGreen.withOpacity(0.5),
-              )
-            else if (isDropdown && dropdownValue != null && items != null)
+          ),
+          child: Row(
+            children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey[300]!),
+                  color: primaryGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  underline: const SizedBox(),
-                  icon: Icon(Icons.arrow_drop_down, color: primaryGreen),
-                  items: items.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(fontSize: 14),
+                child: Center(child: Icon(icon, color: primaryGreen, size: 20)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null && onChangedDropdown != null) {
-                      onChangedDropdown(value);
-                    }
-                  },
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            else if (isAction)
-              Icon(Icons.chevron_right, color: primaryGreen),
-          ],
+              ),
+              const SizedBox(width: 12),
+              if (isSwitch && value != null)
+                Switch(
+                  value: value,
+                  onChanged: onChanged,
+                  activeColor: primaryGreen,
+                  activeTrackColor: primaryGreen.withOpacity(0.5),
+                )
+              else if (isDropdown && dropdownValue != null && items != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                    ),
+                  ),
+                  child: DropdownButton<String>(
+                    value: dropdownValue,
+                    underline: const SizedBox(),
+                    icon: Icon(Icons.arrow_drop_down, color: primaryGreen),
+                    items: items.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item, style: const TextStyle(fontSize: 14)),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null && onChangedDropdown != null) {
+                        onChangedDropdown(value);
+                      }
+                    },
+                  ),
+                )
+              else if (isAction)
+                Icon(Icons.chevron_right, color: primaryGreen),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildLogoutButton() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -723,9 +766,13 @@ class _MorePageState extends State<MorePage> {
     );
   }
 
-  void _editField(String fieldName, String currentValue, Function(String) onSave) {
+  void _editField(
+    String fieldName,
+    String currentValue,
+    Function(String) onSave,
+  ) {
     final controller = TextEditingController(text: currentValue);
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -809,7 +856,8 @@ class _MorePageState extends State<MorePage> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (newPasswordController.text != confirmPasswordController.text) {
+              if (newPasswordController.text !=
+                  confirmPasswordController.text) {
                 _showErrorSnackbar('Passwords do not match');
               } else if (newPasswordController.text.isEmpty) {
                 _showErrorSnackbar('Please enter a new password');
@@ -836,8 +884,8 @@ class _MorePageState extends State<MorePage> {
         builder: (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Privacy Policy'),
-            backgroundColor: Colors.white,
-            foregroundColor: darkGreen,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           body: const Padding(
             padding: EdgeInsets.all(16.0),
@@ -870,8 +918,8 @@ class _MorePageState extends State<MorePage> {
         builder: (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Terms of Service'),
-            backgroundColor: Colors.white,
-            foregroundColor: darkGreen,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           body: const Padding(
             padding: EdgeInsets.all(16.0),
@@ -909,10 +957,7 @@ class _MorePageState extends State<MorePage> {
           children: [
             const Text(
               'Contact Support',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildSupportOption(
@@ -973,9 +1018,7 @@ class _MorePageState extends State<MorePage> {
                   color: primaryGreen.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Icon(icon, color: primaryGreen, size: 20),
-                ),
+                child: Center(child: Icon(icon, color: primaryGreen, size: 20)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -991,10 +1034,7 @@ class _MorePageState extends State<MorePage> {
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -1043,19 +1083,13 @@ class _MorePageState extends State<MorePage> {
 
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: primaryGreen,
-      ),
+      SnackBar(content: Text(message), backgroundColor: primaryGreen),
     );
   }
 
   void _showErrorSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 

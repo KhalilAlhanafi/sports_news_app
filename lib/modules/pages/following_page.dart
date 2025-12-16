@@ -11,11 +11,10 @@ class _FollowingPageState extends State<FollowingPage> {
   static const Color primaryGreen = Color(0xFF43A047);
   static const Color darkGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF81C784);
-  static const Color backgroundColor = Color(0xFFF5F5F5);
 
   int _selectedCategory = 0; // 0: Players, 1: Leagues, 2: Teams, 3: Sports
   final List<String> _categories = ['Players', 'Leagues', 'Teams', 'Sports'];
-  
+
   // Sample data for each category
   final List<Map<String, dynamic>> _allPlayers = [
     {
@@ -195,54 +194,19 @@ class _FollowingPageState extends State<FollowingPage> {
   ];
 
   final List<Map<String, dynamic>> _allSports = [
-    {
-      'id': '1',
-      'name': 'Football',
-      'logo': '⚽',
-      'isFollowing': true,
-    },
-    {
-      'id': '2',
-      'name': 'Basketball',
-      'logo': '🏀',
-      'isFollowing': true,
-    },
-    {
-      'id': '3',
-      'name': 'Tennis',
-      'logo': '🎾',
-      'isFollowing': false,
-    },
-    {
-      'id': '4',
-      'name': 'Baseball',
-      'logo': '⚾',
-      'isFollowing': false,
-    },
+    {'id': '1', 'name': 'Football', 'logo': '⚽', 'isFollowing': true},
+    {'id': '2', 'name': 'Basketball', 'logo': '🏀', 'isFollowing': true},
+    {'id': '3', 'name': 'Tennis', 'logo': '🎾', 'isFollowing': false},
+    {'id': '4', 'name': 'Baseball', 'logo': '⚾', 'isFollowing': false},
     {
       'id': '5',
       'name': 'American Football',
       'logo': '🏈',
       'isFollowing': false,
     },
-    {
-      'id': '6',
-      'name': 'Volleyball',
-      'logo': '🏐',
-      'isFollowing': false,
-    },
-    {
-      'id': '7',
-      'name': 'Cricket',
-      'logo': '🏏',
-      'isFollowing': false,
-    },
-    {
-      'id': '8',
-      'name': 'Rugby',
-      'logo': '🏉',
-      'isFollowing': true,
-    },
+    {'id': '6', 'name': 'Volleyball', 'logo': '🏐', 'isFollowing': false},
+    {'id': '7', 'name': 'Cricket', 'logo': '🏏', 'isFollowing': false},
+    {'id': '8', 'name': 'Rugby', 'logo': '🏉', 'isFollowing': true},
   ];
 
   List<Map<String, dynamic>> get _currentCategoryData {
@@ -284,7 +248,7 @@ class _FollowingPageState extends State<FollowingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -293,9 +257,7 @@ class _FollowingPageState extends State<FollowingPage> {
             // Category Tabs
             _buildCategoryTabs(),
             // Content
-            Expanded(
-              child: _buildContent(),
-            ),
+            Expanded(child: _buildContent()),
           ],
         ),
       ),
@@ -305,30 +267,30 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         children: [
-          SizedBox(width: 16,),
-          const Expanded(
+          SizedBox(width: 16),
+          Expanded(
             child: Text(
               'Following',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: primaryGreen.withOpacity(0.1),
+              color: Theme.of(context).colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               _getCategorySubtitle().split('/')[0],
-              style: const TextStyle(
-                color: primaryGreen,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -341,7 +303,7 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget _buildCategoryTabs() {
     return Container(
       height: 50,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -362,19 +324,28 @@ class _FollowingPageState extends State<FollowingPage> {
                 borderRadius: BorderRadius.circular(12),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: isSelected ? primaryGreen : Colors.grey[100],
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isSelected ? primaryGreen : Colors.grey[300]!,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.outlineVariant,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
                   child: Text(
                     _categories[index],
                     style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.grey[800],
+                      color: isSelected
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
                     ),
@@ -391,12 +362,14 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget _buildContent() {
     final data = _currentCategoryData;
     final followingItems = data.where((item) => item['isFollowing']).toList();
-    final notFollowingItems = data.where((item) => !item['isFollowing']).toList();
+    final notFollowingItems = data
+        .where((item) => !item['isFollowing'])
+        .toList();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -431,10 +404,10 @@ class _FollowingPageState extends State<FollowingPage> {
                     children: [
                       Text(
                         _getCategoryTitle(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -442,7 +415,7 @@ class _FollowingPageState extends State<FollowingPage> {
                         _getCategorySubtitle(),
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -458,13 +431,17 @@ class _FollowingPageState extends State<FollowingPage> {
                 // Following Section
                 if (followingItems.isNotEmpty) ...[
                   _buildSectionHeader('Following'),
-                  ...followingItems.map((item) => _buildListItem(item, isFollowing: true)),
+                  ...followingItems.map(
+                    (item) => _buildListItem(item, isFollowing: true),
+                  ),
                   const SizedBox(height: 20),
                 ],
                 // Suggestions Section
                 if (notFollowingItems.isNotEmpty) ...[
                   _buildSectionHeader('Suggestions'),
-                  ...notFollowingItems.map((item) => _buildListItem(item, isFollowing: false)),
+                  ...notFollowingItems.map(
+                    (item) => _buildListItem(item, isFollowing: false),
+                  ),
                   const SizedBox(height: 16),
                 ],
               ],
@@ -480,23 +457,28 @@ class _FollowingPageState extends State<FollowingPage> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF1A1A1A),
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
     );
   }
 
-  Widget _buildListItem(Map<String, dynamic> item, {required bool isFollowing}) {
+  Widget _buildListItem(
+    Map<String, dynamic> item, {
+    required bool isFollowing,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isFollowing ? primaryGreen.withOpacity(0.3) : Colors.grey[200]!,
+          color: isFollowing
+              ? primaryGreen.withOpacity(0.3)
+              : Theme.of(context).colorScheme.outlineVariant,
           width: isFollowing ? 1.5 : 1,
         ),
         boxShadow: [
@@ -523,7 +505,9 @@ class _FollowingPageState extends State<FollowingPage> {
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: isFollowing ? primaryGreen.withOpacity(0.1) : Colors.grey[100],
+                    color: isFollowing
+                        ? primaryGreen.withOpacity(0.1)
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -541,10 +525,10 @@ class _FollowingPageState extends State<FollowingPage> {
                     children: [
                       Text(
                         item['name'],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -554,7 +538,7 @@ class _FollowingPageState extends State<FollowingPage> {
                         _getItemSubtitle(item),
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -579,7 +563,9 @@ class _FollowingPageState extends State<FollowingPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isFollowing ? Colors.grey[400]! : primaryGreen,
+          color: isFollowing
+              ? Theme.of(context).colorScheme.outlineVariant
+              : primaryGreen,
           width: 1.5,
         ),
         color: isFollowing ? Colors.transparent : primaryGreen,
@@ -597,7 +583,9 @@ class _FollowingPageState extends State<FollowingPage> {
                 Icon(
                   isFollowing ? Icons.check : Icons.add,
                   size: 16,
-                  color: isFollowing ? Colors.grey[600] : Colors.white,
+                  color: isFollowing
+                      ? Theme.of(context).colorScheme.onSurfaceVariant
+                      : Colors.white,
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -605,7 +593,9 @@ class _FollowingPageState extends State<FollowingPage> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: isFollowing ? Colors.grey[600] : Colors.white,
+                    color: isFollowing
+                        ? Theme.of(context).colorScheme.onSurfaceVariant
+                        : Colors.white,
                   ),
                 ),
               ],

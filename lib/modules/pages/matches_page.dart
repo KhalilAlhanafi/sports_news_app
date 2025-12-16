@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'match_datail_page.dart' as match_details;
 
 // Sport Type Enum
 enum SportType { football, basketball, tennis, volleyball }
@@ -364,7 +365,7 @@ class _MatchesPageState extends State<MatchesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -414,8 +415,8 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget _buildDesktopSidebar() {
     return Container(
       width: 280,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -759,7 +760,7 @@ class _MatchesPageState extends State<MatchesPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -770,12 +771,12 @@ class _MatchesPageState extends State<MatchesPage> {
       ),
       child: Row(
         children: [
-          const Text(
+          Text(
             'Matches Schedule',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const Spacer(),
@@ -817,10 +818,10 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget _buildMobileHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         children: [
-        /*  IconButton(
+          /*  IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
@@ -829,13 +830,13 @@ class _MatchesPageState extends State<MatchesPage> {
             constraints: const BoxConstraints(),
           ),*/
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'Matches',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -865,7 +866,7 @@ class _MatchesPageState extends State<MatchesPage> {
 
     return Container(
       height: 60,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -923,10 +924,14 @@ class _MatchesPageState extends State<MatchesPage> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected ? primaryGreen : Colors.grey[100],
+                    color: isSelected
+                        ? primaryGreen
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isSelected ? primaryGreen : Colors.grey[300]!,
+                      color: isSelected
+                          ? primaryGreen
+                          : Theme.of(context).colorScheme.outlineVariant,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -939,7 +944,9 @@ class _MatchesPageState extends State<MatchesPage> {
                         Text(
                           label,
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey[800],
+                            color: isSelected
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
@@ -949,7 +956,9 @@ class _MatchesPageState extends State<MatchesPage> {
                           style: TextStyle(
                             color: isSelected
                                 ? Colors.white.withOpacity(0.9)
-                                : Colors.grey[600],
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                             fontSize: 11,
                           ),
                         ),
@@ -986,7 +995,7 @@ class _MatchesPageState extends State<MatchesPage> {
 
     return Container(
       height: 50,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -1013,10 +1022,14 @@ class _MatchesPageState extends State<MatchesPage> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected ? sport.$4 : Colors.grey[100],
+                    color: isSelected
+                        ? sport.$4
+                        : Theme.of(context).colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: isSelected ? sport.$4 : Colors.grey[300]!,
+                      color: isSelected
+                          ? sport.$4
+                          : Theme.of(context).colorScheme.outlineVariant,
                     ),
                   ),
                   child: Row(
@@ -1024,13 +1037,17 @@ class _MatchesPageState extends State<MatchesPage> {
                       Icon(
                         sport.$2,
                         size: 18,
-                        color: isSelected ? Colors.white : Colors.grey[700],
+                        color: isSelected
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         sport.$3,
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey[800],
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -1049,7 +1066,7 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget _buildMainContent({required bool isDesktop}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -1085,16 +1102,19 @@ class _MatchesPageState extends State<MatchesPage> {
                     children: [
                       Text(
                         _getDateTitle(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${_filteredMatches.length} matches scheduled',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -1163,7 +1183,10 @@ class _MatchesPageState extends State<MatchesPage> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Container(height: 1, color: Colors.grey[200]),
+                    child: Container(
+                      height: 1,
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                    ),
                   ),
                 ],
               ),
@@ -1187,33 +1210,39 @@ class _MatchesPageState extends State<MatchesPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: match.status == MatchStatus.live
               ? Colors.red
-              : Colors.grey[200]!,
+              : Theme.of(context).colorScheme.outlineVariant,
           width: match.status == MatchStatus.live ? 2 : 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: match.status == MatchStatus.live
-                ? Colors.red.withOpacity(0.15)
-                : Colors.black.withOpacity(0.05),
-            blurRadius: match.status == MatchStatus.live ? 12 : 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: match.status == MatchStatus.live
+            ? [
+                BoxShadow(
+                  color: Colors.red.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : const [],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            // Navigate to match details
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    match_details.MatchDetailsPage(matchId: match.id),
+              ),
+            );
           },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 // Match Status and Time
@@ -1258,13 +1287,15 @@ class _MatchesPageState extends State<MatchesPage> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: Theme.of(context).colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           'FT',
                           style: TextStyle(
-                            color: Colors.grey[700],
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
                             fontSize: 11,
                           ),
@@ -1302,7 +1333,7 @@ class _MatchesPageState extends State<MatchesPage> {
                     const Spacer(),
                     Icon(
                       Icons.chevron_right,
-                      color: Colors.grey[400],
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 20,
                     ),
                   ],
