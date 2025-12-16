@@ -502,8 +502,8 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
         team: 'Individual',
         sport: SportType.tennis,
         position: 'Singles',
-        imageEmoji: '🇷🇺',
-        flagEmoji: '🇷🇺',
+        imageEmoji: '🇷🇸',
+        flagEmoji: '🇷🇸',
       ),
       Player(
         id: 'zverev',
@@ -845,45 +845,49 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: scheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            return _buildResponsiveLayout(constraints);
+            return _buildResponsiveLayout(constraints, scheme);
           },
         ),
       ),
     );
   }
 
-  Widget _buildResponsiveLayout(BoxConstraints constraints) {
+  Widget _buildResponsiveLayout(
+    BoxConstraints constraints,
+    ColorScheme scheme,
+  ) {
     final width = constraints.maxWidth;
     final isDesktop = width > 1024;
     final isTablet = width > 600 && width <= 1024;
 
     if (isDesktop) {
-      return _buildDesktopLayout();
+      return _buildDesktopLayout(scheme);
     } else if (isTablet) {
-      return _buildTabletLayout();
+      return _buildTabletLayout(scheme);
     } else {
-      return _buildMobileLayout();
+      return _buildMobileLayout(scheme);
     }
   }
 
   // ==================== DESKTOP LAYOUT ====================
-  Widget _buildDesktopLayout() {
+  Widget _buildDesktopLayout(ColorScheme scheme) {
     return Row(
       children: [
-        _buildDesktopSidebar(),
+        _buildDesktopSidebar(scheme),
         Expanded(
           child: Column(
             children: [
-              _buildDesktopHeader(),
+              _buildDesktopHeader(scheme),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(32),
-                  child: _buildMainContent(isDesktop: true),
+                  child: _buildMainContent(scheme, isDesktop: true),
                 ),
               ),
             ],
@@ -893,16 +897,16 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildDesktopSidebar() {
+  Widget _buildDesktopSidebar(ColorScheme scheme) {
     return Container(
       width: 280,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: scheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: Offset(2, 0),
+            offset: const Offset(2, 0),
           ),
         ],
       ),
@@ -926,53 +930,59 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
+                Text(
                   'SportsFeed',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: darkGreen,
+                    color: scheme.onSurface,
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: scheme.outlineVariant),
           // Onboarding Progress
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Setup Progress',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey,
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 16),
-                _buildProgressItem('Choose Sports', true, 1),
-                _buildProgressItem('Select Leagues', true, 2),
-                _buildProgressItem('Follow Teams', true, 3),
-                _buildProgressItem('Follow Players', false, 4, isActive: true),
+                _buildProgressItem('Choose Sports', true, 1, scheme: scheme),
+                _buildProgressItem('Select Leagues', true, 2, scheme: scheme),
+                _buildProgressItem('Follow Teams', true, 3, scheme: scheme),
+                _buildProgressItem(
+                  'Follow Players',
+                  false,
+                  4,
+                  isActive: true,
+                  scheme: scheme,
+                ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: scheme.outlineVariant),
           // Sports Quick Stats
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Following by Sport',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey,
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -984,6 +994,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       .length,
                   _footballPlayers.length,
                   primaryGreen,
+                  scheme: scheme,
                 ),
                 _buildSportStatRow(
                   Icons.sports_basketball,
@@ -993,6 +1004,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       .length,
                   _basketballPlayers.length,
                   Colors.orange[700]!,
+                  scheme: scheme,
                 ),
                 _buildSportStatRow(
                   Icons.sports_tennis,
@@ -1002,6 +1014,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       .length,
                   _tennisPlayers.length,
                   Colors.yellow[800]!,
+                  scheme: scheme,
                 ),
                 _buildSportStatRow(
                   Icons.sports_volleyball,
@@ -1011,6 +1024,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       .length,
                   _volleyballPlayers.length,
                   Colors.blue[700]!,
+                  scheme: scheme,
                 ),
               ],
             ),
@@ -1038,15 +1052,18 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                 const SizedBox(height: 12),
                 Text(
                   '${_followedPlayerIds.length}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: darkGreen,
+                    color: primaryGreen,
                   ),
                 ),
-                const Text(
+                Text(
                   'Players Following',
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -1061,8 +1078,9 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     String sport,
     int following,
     int total,
-    Color color,
-  ) {
+    Color color, {
+    required ColorScheme scheme,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -1082,15 +1100,19 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
               children: [
                 Text(
                   sport,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
+                    color: scheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$following of $total',
-                  style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -1098,13 +1120,15 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: following > 0 ? color.withOpacity(0.1) : Colors.grey[100],
+              color: following > 0
+                  ? color.withOpacity(0.1)
+                  : scheme.surfaceVariant,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               '$following',
               style: TextStyle(
-                color: following > 0 ? color : Colors.grey[500],
+                color: following > 0 ? color : scheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),
@@ -1120,6 +1144,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     bool isCompleted,
     int step, {
     bool isActive = false,
+    required ColorScheme scheme,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1133,7 +1158,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   ? primaryGreen
                   : isActive
                   ? primaryGreen.withOpacity(0.2)
-                  : Colors.grey[200],
+                  : scheme.surfaceVariant,
               shape: BoxShape.circle,
               border: isActive
                   ? Border.all(color: primaryGreen, width: 2)
@@ -1145,7 +1170,9 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   : Text(
                       '$step',
                       style: TextStyle(
-                        color: isActive ? primaryGreen : Colors.grey,
+                        color: isActive
+                            ? primaryGreen
+                            : scheme.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1156,7 +1183,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
             child: Text(
               title,
               style: TextStyle(
-                color: isActive ? darkGreen : Colors.grey[600],
+                color: isActive ? primaryGreen : scheme.onSurfaceVariant,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
@@ -1182,11 +1209,11 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildDesktopHeader() {
+  Widget _buildDesktopHeader(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -1197,51 +1224,54 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
       ),
       child: Row(
         children: [
-          Expanded(child: _buildSearchBar(isDesktop: true)),
+          Expanded(child: _buildSearchBar(scheme, isDesktop: true)),
           const SizedBox(width: 24),
-          _buildFollowingChip(),
+          _buildFollowingChip(scheme),
           const SizedBox(width: 16),
-          _buildFinishButton(),
+          _buildFinishButton(scheme),
         ],
       ),
     );
   }
 
   // ==================== TABLET LAYOUT ====================
-  Widget _buildTabletLayout() {
+  Widget _buildTabletLayout(ColorScheme scheme) {
     return Column(
       children: [
-        _buildMobileHeader(),
-        _buildSearchBar(isDesktop: false),
-        _buildTabBar(),
+        _buildMobileHeader(scheme),
+        _buildSearchBar(scheme, isDesktop: false),
+        _buildTabBar(scheme),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: _buildTabContent(crossAxisCount: 2),
+            child: _buildTabContent(scheme, crossAxisCount: 2),
           ),
         ),
-        _buildBottomBar(),
+        _buildBottomBar(scheme),
       ],
     );
   }
 
   // ==================== MOBILE LAYOUT ====================
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(ColorScheme scheme) {
     return Column(
       children: [
-        _buildMobileHeader(),
-        _buildSearchBar(isDesktop: false),
-        _buildTabBar(),
-        Expanded(child: _buildTabContent(crossAxisCount: 1)),
-        _buildBottomBar(),
+        _buildMobileHeader(scheme),
+        _buildSearchBar(scheme, isDesktop: false),
+        _buildTabBar(scheme),
+        Expanded(child: _buildTabContent(scheme, crossAxisCount: 1)),
+        _buildBottomBar(scheme),
       ],
     );
   }
 
-  Widget _buildMobileHeader() {
+  Widget _buildMobileHeader(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1251,12 +1281,12 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.arrow_back_ios, color: darkGreen),
+                icon: Icon(Icons.arrow_back_ios, color: scheme.onSurface),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1265,13 +1295,13 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: scheme.onSurface,
                       ),
                     ),
                   ],
                 ),
               ),
-              _buildFollowingChip(),
+              _buildFollowingChip(scheme),
             ],
           ),
           const SizedBox(height: 16),
@@ -1280,18 +1310,18 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildSearchBar({required bool isDesktop}) {
+  Widget _buildSearchBar(ColorScheme scheme, {required bool isDesktop}) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 0 : 20,
         vertical: isDesktop ? 0 : 16,
       ),
-      color: isDesktop ? Colors.transparent : Colors.white,
+      color: isDesktop ? Colors.transparent : scheme.surface,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: scheme.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey[300]!),
+          border: Border.all(color: scheme.outlineVariant),
         ),
         child: TextField(
           controller: _searchController,
@@ -1302,11 +1332,11 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
           },
           decoration: InputDecoration(
             hintText: 'Search players, teams, or nationalities...',
-            hintStyle: TextStyle(color: Colors.grey[500]),
-            prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+            hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+            prefixIcon: Icon(Icons.search, color: scheme.onSurfaceVariant),
             suffixIcon: _searchQuery.isNotEmpty
                 ? IconButton(
-                    icon: Icon(Icons.clear, color: Colors.grey[500]),
+                    icon: Icon(Icons.clear, color: scheme.onSurfaceVariant),
                     onPressed: () {
                       setState(() {
                         _searchController.clear();
@@ -1326,23 +1356,38 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildFollowingChip() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  Widget _buildFollowingChip(ColorScheme scheme) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: primaryGreen.withOpacity(0.1),
+        color: _followedPlayerIds.isNotEmpty
+            ? primaryGreen.withOpacity(0.1)
+            : scheme.surfaceVariant,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: primaryGreen.withOpacity(0.3)),
+        border: Border.all(
+          color: _followedPlayerIds.isNotEmpty
+              ? primaryGreen.withOpacity(0.3)
+              : scheme.outline,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.people, color: primaryGreen, size: 18),
+          Icon(
+            _followedPlayerIds.isNotEmpty ? Icons.people : Icons.people_outline,
+            color: _followedPlayerIds.isNotEmpty
+                ? primaryGreen
+                : scheme.onSurfaceVariant,
+            size: 18,
+          ),
           const SizedBox(width: 6),
           Text(
             '${_followedPlayerIds.length} Following',
-            style: const TextStyle(
-              color: primaryGreen,
+            style: TextStyle(
+              color: _followedPlayerIds.isNotEmpty
+                  ? primaryGreen
+                  : scheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -1351,7 +1396,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildFinishButton() {
+  Widget _buildFinishButton(ColorScheme scheme) {
     return ElevatedButton(
       onPressed: () {
         Navigator.pushAndRemoveUntil(
@@ -1380,42 +1425,60 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(ColorScheme scheme) {
     return Container(
-      color: Colors.white,
+      color: scheme.surface,
       child: TabBar(
         controller: _tabController,
         labelColor: primaryGreen,
-        unselectedLabelColor: Colors.grey[600],
+        unselectedLabelColor: scheme.onSurfaceVariant,
         indicatorColor: primaryGreen,
         indicatorWeight: 3,
         isScrollable: true,
         labelStyle: const TextStyle(fontWeight: FontWeight.w600),
         tabAlignment: TabAlignment.start,
         tabs: [
-          _buildTabItem(Icons.star, 'Featured', _featuredPlayers.length),
+          _buildTabItem(
+            Icons.star,
+            'Featured',
+            _featuredPlayers.length,
+            scheme,
+          ),
           _buildTabItem(
             Icons.sports_soccer,
             'Football',
             _footballPlayers.length,
+            scheme,
           ),
           _buildTabItem(
             Icons.sports_basketball,
             'Basketball',
             _basketballPlayers.length,
+            scheme,
           ),
-          _buildTabItem(Icons.sports_tennis, 'Tennis', _tennisPlayers.length),
+          _buildTabItem(
+            Icons.sports_tennis,
+            'Tennis',
+            _tennisPlayers.length,
+            scheme,
+          ),
           _buildTabItem(
             Icons.sports_volleyball,
             'Volleyball',
             _volleyballPlayers.length,
+            scheme,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTabItem(IconData icon, String label, int count) {
+  Widget _buildTabItem(
+    IconData icon,
+    String label,
+    int count,
+    ColorScheme scheme,
+  ) {
     return Tab(
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -1430,10 +1493,13 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                 margin: const EdgeInsets.only(left: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: scheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text('$count', style: const TextStyle(fontSize: 12)),
+                child: Text(
+                  '$count',
+                  style: TextStyle(fontSize: 12, color: scheme.onSurface),
+                ),
               ),
           ],
         ),
@@ -1441,10 +1507,10 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildMainContent({required bool isDesktop}) {
+  Widget _buildMainContent(ColorScheme scheme, {required bool isDesktop}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -1468,7 +1534,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                     color: primaryGreen.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.people_outline,
                     color: primaryGreen,
                     size: 28,
@@ -1479,18 +1545,21 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Follow Your Favorite Players',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: scheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Get updates on their matches, stats, and news',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -1505,13 +1574,13 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
               scrollDirection: Axis.horizontal,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: scheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey[600],
+                  unselectedLabelColor: scheme.onSurfaceVariant,
                   indicator: BoxDecoration(
                     color: primaryGreen,
                     borderRadius: BorderRadius.circular(12),
@@ -1541,13 +1610,26 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
               children: [
                 _buildPlayersList(
                   _featuredPlayers,
+                  scheme,
                   isDesktop: isDesktop,
                   showSportBadge: true,
                 ),
-                _buildPlayersList(_footballPlayers, isDesktop: isDesktop),
-                _buildPlayersList(_basketballPlayers, isDesktop: isDesktop),
-                _buildPlayersList(_tennisPlayers, isDesktop: isDesktop),
-                _buildPlayersList(_volleyballPlayers, isDesktop: isDesktop),
+                _buildPlayersList(
+                  _footballPlayers,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
+                _buildPlayersList(
+                  _basketballPlayers,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
+                _buildPlayersList(_tennisPlayers, scheme, isDesktop: isDesktop),
+                _buildPlayersList(
+                  _volleyballPlayers,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
               ],
             ),
           ),
@@ -1556,26 +1638,27 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildTabContent({required int crossAxisCount}) {
+  Widget _buildTabContent(ColorScheme scheme, {required int crossAxisCount}) {
     return TabBarView(
       controller: _tabController,
       children: [
-        _buildPlayersGrid(_featuredPlayers, showSportBadge: true),
-        _buildPlayersGrid(_footballPlayers),
-        _buildPlayersGrid(_basketballPlayers),
-        _buildPlayersGrid(_tennisPlayers),
-        _buildPlayersGrid(_volleyballPlayers),
+        _buildPlayersGrid(_featuredPlayers, scheme, showSportBadge: true),
+        _buildPlayersGrid(_footballPlayers, scheme),
+        _buildPlayersGrid(_basketballPlayers, scheme),
+        _buildPlayersGrid(_tennisPlayers, scheme),
+        _buildPlayersGrid(_volleyballPlayers, scheme),
       ],
     );
   }
 
   Widget _buildPlayersList(
-    List<Player> players, {
+    List<Player> players,
+    ColorScheme scheme, {
     required bool isDesktop,
     bool showSportBadge = false,
   }) {
     if (players.isEmpty) {
-      return _buildEmptyState();
+      return _buildEmptyState(scheme);
     }
 
     return GridView.builder(
@@ -1588,17 +1671,22 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
       ),
       itemCount: players.length,
       itemBuilder: (context, index) {
-        return _buildPlayerCard(players[index], showSportBadge: showSportBadge);
+        return _buildPlayerCard(
+          players[index],
+          scheme,
+          showSportBadge: showSportBadge,
+        );
       },
     );
   }
 
   Widget _buildPlayersGrid(
-    List<Player> players, {
+    List<Player> players,
+    ColorScheme scheme, {
     bool showSportBadge = false,
   }) {
     if (players.isEmpty) {
-      return _buildEmptyState();
+      return _buildEmptyState(scheme);
     }
 
     return ListView.builder(
@@ -1609,6 +1697,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
           padding: const EdgeInsets.only(bottom: 8),
           child: _buildPlayerCard(
             players[index],
+            scheme,
             showSportBadge: showSportBadge,
           ),
         );
@@ -1616,17 +1705,21 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildPlayerCard(Player player, {bool showSportBadge = false}) {
+  Widget _buildPlayerCard(
+    Player player,
+    ColorScheme scheme, {
+    bool showSportBadge = false,
+  }) {
     final isFollowing = _followedPlayerIds.contains(player.id);
     final sportColor = _getSportColor(player.sport);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isFollowing ? sportColor : Colors.grey[200]!,
+          color: isFollowing ? sportColor : scheme.outlineVariant,
           width: isFollowing ? 2 : 1,
         ),
         boxShadow: isFollowing
@@ -1637,7 +1730,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   offset: const Offset(0, 2),
                 ),
               ]
-            : const [],
+            : [],
       ),
       child: Material(
         color: Colors.transparent,
@@ -1732,29 +1825,33 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                                 fontWeight: FontWeight.bold,
                                 color: isFollowing
                                     ? sportColor
-                                    : const Color(0xFF1A1A1A),
+                                    : scheme.onSurface,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           if (showSportBadge)
                             Container(
                               margin: const EdgeInsets.only(left: 8),
-                              child: _buildSportBadge(player.sport),
+                              child: _buildSportBadge(player.sport, scheme),
                             ),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.sports, size: 14, color: Colors.grey[500]),
+                          Icon(
+                            Icons.sports,
+                            size: 14,
+                            color: scheme.onSurfaceVariant,
+                          ),
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
                               player.team,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey[600],
+                                color: scheme.onSurfaceVariant,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1773,14 +1870,14 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                               vertical: 3,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
+                              color: scheme.surfaceVariant,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               player.position,
                               style: TextStyle(
                                 fontSize: 11,
-                                color: Colors.grey[700],
+                                color: scheme.onSurfaceVariant,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -1789,7 +1886,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                             player.nationality,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[500],
+                              color: scheme.onSurfaceVariant,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -1863,7 +1960,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildSportBadge(SportType sport) {
+  Widget _buildSportBadge(SportType sport, ColorScheme scheme) {
     final color = _getSportColor(sport);
     final icon = _getSportIcon(sport);
     final name = _getSportName(sport);
@@ -1892,7 +1989,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(ColorScheme scheme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1900,24 +1997,28 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: scheme.surfaceVariant,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
+            child: Icon(
+              Icons.search_off,
+              size: 48,
+              color: scheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'No players found',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
+              color: scheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Try searching with different keywords',
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 24),
           TextButton.icon(
@@ -1936,11 +2037,12 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outlineVariant)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -1967,20 +2069,23 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.people, color: primaryGreen, size: 20),
+                    Icon(Icons.people, color: primaryGreen, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         '${_followedPlayerIds.length} players selected',
-                        style: const TextStyle(
-                          color: darkGreen,
+                        style: TextStyle(
+                          color: primaryGreen,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                     Text(
                       'Final step! 🎉',
-                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      style: TextStyle(
+                        color: scheme.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -2001,7 +2106,7 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                   child: Text(
                     'Skip',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: scheme.onSurfaceVariant,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

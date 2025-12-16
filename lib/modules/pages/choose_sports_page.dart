@@ -153,47 +153,51 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: scheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            return _buildResponsiveLayout(constraints);
+            return _buildResponsiveLayout(constraints, scheme);
           },
         ),
       ),
     );
   }
 
-  Widget _buildResponsiveLayout(BoxConstraints constraints) {
+  Widget _buildResponsiveLayout(
+    BoxConstraints constraints,
+    ColorScheme scheme,
+  ) {
     final width = constraints.maxWidth;
     final isDesktop = width > 1024;
     final isTablet = width > 600 && width <= 1024;
 
     if (isDesktop) {
-      return _buildDesktopLayout();
+      return _buildDesktopLayout(scheme);
     } else if (isTablet) {
-      return _buildTabletLayout();
+      return _buildTabletLayout(scheme);
     } else {
-      return _buildMobileLayout();
+      return _buildMobileLayout(scheme);
     }
   }
 
   // ==================== DESKTOP LAYOUT ====================
-  Widget _buildDesktopLayout() {
+  Widget _buildDesktopLayout(ColorScheme scheme) {
     return Row(
       children: [
-        _buildDesktopSidebar(),
+        _buildDesktopSidebar(scheme),
         Expanded(
           child: Column(
             children: [
-              _buildDesktopHeader(),
+              _buildDesktopHeader(scheme),
               Expanded(
                 child: FadeTransition(
                   opacity: _fadeAnimation,
                   child: Padding(
                     padding: const EdgeInsets.all(32),
-                    child: _buildMainContent(isDesktop: true),
+                    child: _buildMainContent(scheme, isDesktop: true),
                   ),
                 ),
               ),
@@ -204,16 +208,16 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildDesktopSidebar() {
+  Widget _buildDesktopSidebar(ColorScheme scheme) {
     return Container(
       width: 300,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: scheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: Offset(2, 0),
+            offset: const Offset(2, 0),
           ),
         ],
       ),
@@ -237,53 +241,59 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
+                Text(
                   'SportsFeed',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: darkGreen,
+                    color: scheme.onSurface,
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: scheme.outlineVariant),
           // Onboarding Progress
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Setup Progress',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey,
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 16),
-                _buildProgressItem('Choose Sports', false, 1, isActive: true),
-                _buildProgressItem('Select Leagues', false, 2),
-                _buildProgressItem('Follow Teams', false, 3),
-                _buildProgressItem('Follow Players', false, 4),
+                _buildProgressItem(
+                  'Choose Sports',
+                  false,
+                  1,
+                  isActive: true,
+                  scheme: scheme,
+                ),
+                _buildProgressItem('Select Leagues', false, 2, scheme: scheme),
+                _buildProgressItem('Follow Teams', false, 3, scheme: scheme),
+                _buildProgressItem('Follow Players', false, 4, scheme: scheme),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: scheme.outlineVariant),
           // Welcome Message
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Welcome! 👋',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: scheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -291,7 +301,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   'Let\'s personalize your sports news experience. Start by selecting the sports you\'re interested in.',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: scheme.onSurfaceVariant,
                     height: 1.5,
                   ),
                 ),
@@ -321,17 +331,20 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                 const SizedBox(height: 12),
                 Text(
                   '${_selectedSportIds.length}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: darkGreen,
+                    color: primaryGreen,
                   ),
                 ),
                 Text(
                   _selectedSportIds.length == 1
                       ? 'Sport Selected'
                       : 'Sports Selected',
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -371,6 +384,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     bool isCompleted,
     int step, {
     bool isActive = false,
+    required ColorScheme scheme,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -384,7 +398,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   ? primaryGreen
                   : isActive
                   ? primaryGreen.withOpacity(0.2)
-                  : Colors.grey[200],
+                  : scheme.surfaceVariant,
               shape: BoxShape.circle,
               border: isActive
                   ? Border.all(color: primaryGreen, width: 2)
@@ -396,7 +410,9 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   : Text(
                       '$step',
                       style: TextStyle(
-                        color: isActive ? primaryGreen : Colors.grey,
+                        color: isActive
+                            ? primaryGreen
+                            : scheme.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -407,7 +423,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
             child: Text(
               title,
               style: TextStyle(
-                color: isActive ? darkGreen : Colors.grey[600],
+                color: isActive ? primaryGreen : scheme.onSurfaceVariant,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
@@ -433,11 +449,11 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildDesktopHeader() {
+  Widget _buildDesktopHeader(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -449,7 +465,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
       child: Row(
         children: [
           // Title
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -458,13 +474,16 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: scheme.onSurface,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Select the sports you want to follow',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -490,7 +509,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                 style: TextButton.styleFrom(foregroundColor: primaryGreen),
               ),
               const SizedBox(width: 16),
-              _buildSelectedChip(),
+              _buildSelectedChip(scheme),
               const SizedBox(width: 16),
               _buildContinueButton(),
             ],
@@ -501,44 +520,51 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
   }
 
   // ==================== TABLET LAYOUT ====================
-  Widget _buildTabletLayout() {
+  Widget _buildTabletLayout(ColorScheme scheme) {
     return Column(
       children: [
-        _buildMobileHeader(),
+        _buildMobileHeader(scheme),
         Expanded(
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: _buildSportsGrid(crossAxisCount: 2, isTablet: true),
+              child: _buildSportsGrid(
+                scheme,
+                crossAxisCount: 2,
+                isTablet: true,
+              ),
             ),
           ),
         ),
-        _buildBottomBar(),
+        _buildBottomBar(scheme),
       ],
     );
   }
 
   // ==================== MOBILE LAYOUT ====================
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(ColorScheme scheme) {
     return Column(
       children: [
-        _buildMobileHeader(),
+        _buildMobileHeader(scheme),
         Expanded(
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: _buildSportsGrid(crossAxisCount: 1, isTablet: false),
+            child: _buildSportsGrid(scheme, crossAxisCount: 1, isTablet: false),
           ),
         ),
-        _buildBottomBar(),
+        _buildBottomBar(scheme),
       ],
     );
   }
 
-  Widget _buildMobileHeader() {
+  Widget _buildMobileHeader(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -558,7 +584,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -567,20 +593,20 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: scheme.onSurface,
                       ),
                     ),
                   ],
                 ),
               ),
-              _buildSelectedChip(),
+              _buildSelectedChip(scheme),
             ],
           ),
           const SizedBox(height: 16),
           // Description
           Text(
             'Select at least one sport to personalize your news feed',
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 14, color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 12),
           // Quick Select All Button
@@ -614,19 +640,19 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildSelectedChip() {
+  Widget _buildSelectedChip(ColorScheme scheme) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: _selectedSportIds.isNotEmpty
             ? primaryGreen.withOpacity(0.1)
-            : Colors.grey[100],
+            : scheme.surfaceVariant,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: _selectedSportIds.isNotEmpty
               ? primaryGreen.withOpacity(0.3)
-              : Colors.grey[300]!,
+              : scheme.outline,
         ),
       ),
       child: Row(
@@ -636,14 +662,18 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
             _selectedSportIds.isNotEmpty
                 ? Icons.check_circle
                 : Icons.circle_outlined,
-            color: _selectedSportIds.isNotEmpty ? primaryGreen : Colors.grey,
+            color: _selectedSportIds.isNotEmpty
+                ? primaryGreen
+                : scheme.onSurfaceVariant,
             size: 18,
           ),
           const SizedBox(width: 6),
           Text(
             '${_selectedSportIds.length} Selected',
             style: TextStyle(
-              color: _selectedSportIds.isNotEmpty ? primaryGreen : Colors.grey,
+              color: _selectedSportIds.isNotEmpty
+                  ? primaryGreen
+                  : scheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
@@ -686,10 +716,10 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildMainContent({required bool isDesktop}) {
+  Widget _buildMainContent(ColorScheme scheme, {required bool isDesktop}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -724,18 +754,21 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'What sports do you love?',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: scheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Select all that interest you - you can change this later',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -743,12 +776,12 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: scheme.outlineVariant),
           // Sports Grid
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: _buildDesktopSportsGrid(),
+              child: _buildDesktopSportsGrid(scheme),
             ),
           ),
         ],
@@ -756,7 +789,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildDesktopSportsGrid() {
+  Widget _buildDesktopSportsGrid(ColorScheme scheme) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -766,12 +799,13 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
       ),
       itemCount: _sports.length,
       itemBuilder: (context, index) {
-        return _buildSportCardDesktop(_sports[index]);
+        return _buildSportCardDesktop(_sports[index], scheme);
       },
     );
   }
 
-  Widget _buildSportsGrid({
+  Widget _buildSportsGrid(
+    ColorScheme scheme, {
     required int crossAxisCount,
     required bool isTablet,
   }) {
@@ -781,23 +815,27 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: _buildSportCardMobile(_sports[index], isTablet: isTablet),
+          child: _buildSportCardMobile(
+            _sports[index],
+            scheme,
+            isTablet: isTablet,
+          ),
         );
       },
     );
   }
 
-  Widget _buildSportCardDesktop(Sport sport) {
+  Widget _buildSportCardDesktop(Sport sport, ColorScheme scheme) {
     final isSelected = _selectedSportIds.contains(sport.id);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: isSelected ? sport.color.withOpacity(0.05) : Colors.white,
+        color: isSelected ? sport.color.withOpacity(0.05) : scheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isSelected ? sport.color : Colors.grey[200]!,
+          color: isSelected ? sport.color : scheme.outlineVariant,
           width: isSelected ? 2.5 : 1.5,
         ),
         boxShadow: [
@@ -827,7 +865,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   decoration: BoxDecoration(
                     color: isSelected
                         ? sport.color.withOpacity(0.15)
-                        : Colors.grey[100],
+                        : scheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Stack(
@@ -835,7 +873,9 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                     children: [
                       Icon(
                         sport.icon,
-                        color: isSelected ? sport.color : Colors.grey[400],
+                        color: isSelected
+                            ? sport.color
+                            : scheme.onSurfaceVariant,
                         size: 40,
                       ),
                       Positioned(
@@ -866,7 +906,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                                 fontWeight: FontWeight.bold,
                                 color: isSelected
                                     ? sport.color
-                                    : const Color(0xFF1A1A1A),
+                                    : scheme.onSurface,
                               ),
                             ),
                           ),
@@ -883,7 +923,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                               border: Border.all(
                                 color: isSelected
                                     ? sport.color
-                                    : Colors.grey[300]!,
+                                    : scheme.outline,
                                 width: 2,
                               ),
                             ),
@@ -900,7 +940,10 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                       const SizedBox(height: 8),
                       Text(
                         sport.description,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: scheme.onSurfaceVariant,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -918,7 +961,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? sport.color.withOpacity(0.1)
-                                  : Colors.grey[100],
+                                  : scheme.surfaceVariant,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -927,7 +970,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                                 fontSize: 11,
                                 color: isSelected
                                     ? sport.color
-                                    : Colors.grey[600],
+                                    : scheme.onSurfaceVariant,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -945,17 +988,21 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildSportCardMobile(Sport sport, {required bool isTablet}) {
+  Widget _buildSportCardMobile(
+    Sport sport,
+    ColorScheme scheme, {
+    required bool isTablet,
+  }) {
     final isSelected = _selectedSportIds.contains(sport.id);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: isSelected ? sport.color.withOpacity(0.05) : Colors.white,
+        color: isSelected ? sport.color.withOpacity(0.05) : scheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isSelected ? sport.color : Colors.grey[200]!,
+          color: isSelected ? sport.color : scheme.outlineVariant,
           width: isSelected ? 2.5 : 1.5,
         ),
         boxShadow: [
@@ -987,7 +1034,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                       decoration: BoxDecoration(
                         color: isSelected
                             ? sport.color.withOpacity(0.15)
-                            : Colors.grey[100],
+                            : scheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Stack(
@@ -995,7 +1042,9 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         children: [
                           Icon(
                             sport.icon,
-                            color: isSelected ? sport.color : Colors.grey[400],
+                            color: isSelected
+                                ? sport.color
+                                : scheme.onSurfaceVariant,
                             size: 36,
                           ),
                           Positioned(
@@ -1022,7 +1071,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                               fontWeight: FontWeight.bold,
                               color: isSelected
                                   ? sport.color
-                                  : const Color(0xFF1A1A1A),
+                                  : scheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -1030,7 +1079,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                             sport.description,
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[600],
+                              color: scheme.onSurfaceVariant,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -1048,7 +1097,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         color: isSelected ? sport.color : Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: isSelected ? sport.color : Colors.grey[300]!,
+                          color: isSelected ? sport.color : scheme.outline,
                           width: 2,
                         ),
                       ),
@@ -1070,7 +1119,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   decoration: BoxDecoration(
                     color: isSelected
                         ? sport.color.withOpacity(0.05)
-                        : Colors.grey[50],
+                        : scheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -1080,7 +1129,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         'Popular Leagues',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.grey[500],
+                          color: scheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -1097,12 +1146,12 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? sport.color.withOpacity(0.15)
-                                  : Colors.white,
+                                  : scheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color: isSelected
                                     ? sport.color.withOpacity(0.3)
-                                    : Colors.grey[200]!,
+                                    : scheme.outlineVariant,
                               ),
                             ),
                             child: Text(
@@ -1111,7 +1160,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                                 fontSize: 12,
                                 color: isSelected
                                     ? sport.color
-                                    : Colors.grey[700],
+                                    : scheme.onSurface,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -1129,18 +1178,12 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(ColorScheme scheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outlineVariant)),
       ),
       child: SafeArea(
         top: false,
@@ -1185,8 +1228,8 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         _selectedSportIds.length == 1
                             ? '${_sports.firstWhere((s) => _selectedSportIds.contains(s.id)).name} selected'
                             : '${_selectedSportIds.length} sports selected',
-                        style: const TextStyle(
-                          color: darkGreen,
+                        style: TextStyle(
+                          color: scheme.onSurface,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -1204,7 +1247,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   child: Text(
                     'Skip',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: scheme.onSurfaceVariant,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -1225,7 +1268,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryGreen,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[300],
+                    disabledBackgroundColor: scheme.surfaceVariant,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 32,
                       vertical: 16,
