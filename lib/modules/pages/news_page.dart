@@ -922,9 +922,10 @@ class NewsDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sportColor = _getSportColor(article.sport);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      //backgroundColor: backgroundColor,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -933,7 +934,7 @@ class NewsDetailsPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surface,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
@@ -956,13 +957,13 @@ class NewsDetailsPage extends StatelessWidget {
                       constraints: const BoxConstraints(),
                     ),
                     const SizedBox(width: 8),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'News Details',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -982,7 +983,7 @@ class NewsDetailsPage extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -1047,14 +1048,14 @@ class NewsDetailsPage extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[100],
+                                  color: colorScheme.surfaceVariant,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
                                   article.sport.toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[700],
+                                    color: colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -1065,10 +1066,10 @@ class NewsDetailsPage extends StatelessWidget {
                           // Title
                           Text(
                             article.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                              color: colorScheme.onSurface,
                               height: 1.3,
                             ),
                           ),
@@ -1079,21 +1080,21 @@ class NewsDetailsPage extends StatelessWidget {
                               Icon(
                                 Icons.person_outline,
                                 size: 16,
-                                color: Colors.grey[500],
+                                color: colorScheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 6),
                               Text(
                                 article.author,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[600],
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Icon(
                                 Icons.calendar_today,
                                 size: 16,
-                                color: Colors.grey[500],
+                                color: colorScheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 6),
                               Text(
@@ -1102,7 +1103,7 @@ class NewsDetailsPage extends StatelessWidget {
                                 ).format(article.publishedAt),
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[600],
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -1111,9 +1112,9 @@ class NewsDetailsPage extends StatelessWidget {
                           // Full Content
                           Text(
                             article.fullContent,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xFF1A1A1A),
+                              color: colorScheme.onSurface,
                               height: 1.6,
                             ),
                           ),
@@ -1129,14 +1130,14 @@ class NewsDetailsPage extends StatelessWidget {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[100],
+                                  color: colorScheme.surfaceVariant,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
                                   '#$tag',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[700],
+                                    color: colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               );
@@ -1147,9 +1148,11 @@ class NewsDetailsPage extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: colorScheme.surfaceVariant,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey[200]!),
+                              border: Border.all(
+                                color: colorScheme.outlineVariant,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1174,7 +1177,7 @@ class NewsDetailsPage extends StatelessWidget {
                                       'Likes',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey[600],
+                                        color: colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                   ],
@@ -1199,7 +1202,7 @@ class NewsDetailsPage extends StatelessWidget {
                                       'Comments',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey[600],
+                                        color: colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                   ],
@@ -1212,19 +1215,19 @@ class NewsDetailsPage extends StatelessWidget {
                                       size: 24,
                                     ),
                                     const SizedBox(height: 4),
-                                    const Text(
+                                    Text(
                                       'Share',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1A1A1A),
+                                        color: colorScheme.onSurface,
                                       ),
                                     ),
                                     Text(
                                       'Article',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey[600],
+                                        color: colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                   ],

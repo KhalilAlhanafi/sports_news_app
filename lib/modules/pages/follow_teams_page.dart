@@ -45,6 +45,33 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
   static const Color darkGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF81C784);
 
+  static const Map<String, String> _teamLogoAssets = {
+    'man_utd': 'assets/images/Manchester-United.png',
+    'man_city': 'assets/images/manchester-city.png',
+    'liverpool': 'assets/images/Liverpool.png',
+    'chelsea': 'assets/images/Chelsea.png',
+    'arsenal': 'assets/images/Arsenal.png',
+    'tottenham': 'assets/images/Tottenham.png',
+    'real_madrid': 'assets/images/Real-Madrid.png',
+    'barcelona': 'assets/images/Barcelona.png',
+    'atletico': 'assets/images/Atletico-Madrid.png',
+    'bayern': 'assets/images/Bayern-Munchen.png',
+    'dortmund': 'assets/images/Borussia-Dortmund.png',
+    'rb_leipzig': 'assets/images/RB-Leipzig.png',
+    'juventus': 'assets/images/Juventus.png',
+    'ac_milan': 'assets/images/AC-Milan.png',
+    'inter': 'assets/images/Inter-Milan.png',
+    'psg': 'assets/images/Paris-saint-germain.png',
+    'monaco': 'assets/images/AS-Monaco.png',
+    'ajax': 'assets/images/Ajax.png',
+    'porto': 'assets/images/FC-Porto.png',
+    'benfica': 'assets/images/Benfica.png',
+    'inter_miami': 'assets/images/Inter-Miami.png',
+    'la_galaxy': 'assets/images/LA-Galaxy.png',
+    'al_nassr': 'assets/images/AL-Nassr.png',
+    'al_hilal': 'assets/images/AL-Hilal.png',
+  };
+
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -57,6 +84,23 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     _initializeTeams();
+  }
+
+  Widget _buildTeamLogo(Team team, Color sportColor) {
+    final assetPath = _teamLogoAssets[team.id];
+    if (assetPath == null) {
+      return Text(team.logoEmoji, style: const TextStyle(fontSize: 30));
+    }
+
+    return Image.asset(
+      assetPath,
+      width: 52,
+      height: 52,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        return Text(team.logoEmoji, style: const TextStyle(fontSize: 30));
+      },
+    );
   }
 
   void _initializeTeams() {
@@ -1212,7 +1256,10 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     );
   }
 
-  Widget _buildResponsiveLayout(BoxConstraints constraints, ColorScheme scheme) {
+  Widget _buildResponsiveLayout(
+    BoxConstraints constraints,
+    ColorScheme scheme,
+  ) {
     final width = constraints.maxWidth;
     final isDesktop = width > 1024;
     final isTablet = width > 600 && width <= 1024;
@@ -1411,7 +1458,10 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                 ),
                 Text(
                   'Teams Following',
-                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 14),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -1456,7 +1506,10 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                 ),
                 Text(
                   '$following of $total',
-                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -1501,10 +1554,12 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
               color: isCompleted
                   ? primaryGreen
                   : isActive
-                      ? primaryGreen.withOpacity(0.2)
-                      : scheme.surfaceVariant,
+                  ? primaryGreen.withOpacity(0.2)
+                  : scheme.surfaceVariant,
               shape: BoxShape.circle,
-              border: isActive ? Border.all(color: primaryGreen, width: 2) : null,
+              border: isActive
+                  ? Border.all(color: primaryGreen, width: 2)
+                  : null,
             ),
             child: Center(
               child: isCompleted
@@ -1512,7 +1567,9 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                   : Text(
                       '$step',
                       style: TextStyle(
-                        color: isActive ? primaryGreen : scheme.onSurfaceVariant,
+                        color: isActive
+                            ? primaryGreen
+                            : scheme.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1785,7 +1842,11 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
         tabs: [
           _buildTabItem(Icons.sports, 'All', _filteredTeams.length, scheme),
           _buildTabItem(
-              Icons.sports_soccer, 'Football', _footballTeams.length, scheme),
+            Icons.sports_soccer,
+            'Football',
+            _footballTeams.length,
+            scheme,
+          ),
           _buildTabItem(
             Icons.sports_basketball,
             'Basketball',
@@ -1793,7 +1854,11 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
             scheme,
           ),
           _buildTabItem(
-              Icons.sports_tennis, 'Tennis', _tennisTeams.length, scheme),
+            Icons.sports_tennis,
+            'Tennis',
+            _tennisTeams.length,
+            scheme,
+          ),
           _buildTabItem(
             Icons.sports_volleyball,
             'Volleyball',
@@ -1805,7 +1870,12 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     );
   }
 
-  Widget _buildTabItem(IconData icon, String label, int count, ColorScheme scheme) {
+  Widget _buildTabItem(
+    IconData icon,
+    String label,
+    int count,
+    ColorScheme scheme,
+  ) {
     return Tab(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1821,8 +1891,10 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                 color: scheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text('$count',
-                  style: TextStyle(fontSize: 12, color: scheme.onSurface)),
+              child: Text(
+                '$count',
+                style: TextStyle(fontSize: 12, color: scheme.onSurface),
+              ),
             ),
         ],
       ),
@@ -1879,7 +1951,9 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                       Text(
                         'Select teams from any sport to get personalized updates',
                         style: TextStyle(
-                            fontSize: 14, color: scheme.onSurfaceVariant),
+                          fontSize: 14,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -1954,8 +2028,11 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
     );
   }
 
-  Widget _buildTeamsList(List<Team> teams, ColorScheme scheme,
-      {required bool isDesktop}) {
+  Widget _buildTeamsList(
+    List<Team> teams,
+    ColorScheme scheme, {
+    required bool isDesktop,
+  }) {
     if (teams.isEmpty) {
       return _buildEmptyState(scheme);
     }
@@ -2028,7 +2105,9 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                 runSpacing: 16,
                 children: groupTeams.map((team) {
                   return SizedBox(
-                      width: 340, child: _buildTeamCard(team, scheme));
+                    width: 340,
+                    child: _buildTeamCard(team, scheme),
+                  );
                 }).toList(),
               )
             else
@@ -2095,24 +2174,14 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
               children: [
                 // Team Logo
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 68,
+                  height: 68,
                   decoration: BoxDecoration(
                     color: sportColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: sportColor.withOpacity(0.3)),
                   ),
-                  child: Center(
-                    child: team.type == TeamType.national
-                        ? Text(
-                            team.logoEmoji,
-                            style: const TextStyle(fontSize: 28),
-                          )
-                        : Text(
-                            team.logoEmoji,
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                  ),
+                  child: Center(child: _buildTeamLogo(team, sportColor)),
                 ),
                 const SizedBox(width: 16),
                 // Team Info
@@ -2123,15 +2192,19 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              team.name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: isFollowing
-                                    ? sportColor
-                                    : scheme.onSurface,
-                                overflow: TextOverflow.ellipsis,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                team.name,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: isFollowing
+                                      ? sportColor
+                                      : scheme.onSurface,
+                                ),
                               ),
                             ),
                           ),
@@ -2308,8 +2381,11 @@ class _FollowTeamsPageState extends State<FollowTeamsPage>
               color: scheme.surfaceVariant,
               shape: BoxShape.circle,
             ),
-            child:
-                Icon(Icons.search_off, size: 48, color: scheme.onSurfaceVariant),
+            child: Icon(
+              Icons.search_off,
+              size: 48,
+              color: scheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 24),
           Text(

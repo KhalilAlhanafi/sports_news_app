@@ -1818,15 +1818,19 @@ class _FollowPlayersPageState extends State<FollowPlayersPage>
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              player.name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: isFollowing
-                                    ? sportColor
-                                    : scheme.onSurface,
-                                overflow: TextOverflow.ellipsis,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                player.name,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isFollowing
+                                      ? sportColor
+                                      : scheme.onSurface,
+                                ),
                               ),
                             ),
                           ),
