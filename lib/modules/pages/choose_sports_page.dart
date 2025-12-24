@@ -1,27 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:sports_news_app/modules/pages/follow_teams_page.dart';
+import 'package:sports_news_app/services/api_service.dart';
 
 // Sport Model
 class Sport {
-  final String id;
+  final int id;
   final String name;
-  final IconData icon;
-  final Color color;
+  final IconData? icon; // Changed from String? to IconData?
+  final Color color; // Changed from String to Color
   final String description;
   final String emoji;
-  final List<String> popularLeagues;
   bool isSelected;
 
   Sport({
     required this.id,
     required this.name,
-    required this.icon,
+    this.icon,
     required this.color,
     required this.description,
     required this.emoji,
-    required this.popularLeagues,
     this.isSelected = false,
   });
+
+  factory Sport.fromJson(Map<String, dynamic> json) {
+    // Parse color from hex string
+    Color parseColor(String hexColor) {
+      hexColor = hexColor.replaceAll('#', '');
+      if (hexColor.length == 6) {
+        hexColor = 'FF$hexColor';
+      }
+      return Color(int.parse(hexColor, radix: 16));
+    }
+
+    // Map icon string to IconData
+    IconData? parseIcon(String? iconName) {
+      if (iconName == null) return null;
+      // You'll need to create a mapping from your API's icon names to Flutter's IconData
+      // This is a simplified example
+      Map<String, IconData> iconMap = {
+        'sports_soccer': Icons.sports_soccer,
+        'sports_basketball': Icons.sports_basketball,
+        'sports_tennis': Icons.sports_tennis,
+        'sports_volleyball': Icons.sports_volleyball,
+      };
+      return iconMap[iconName];
+    }
+
+    return Sport(
+      id: json['id'] is String ? int.parse(json['id']) : json['id'],
+      name: json['name'] ?? '',
+      icon: parseIcon(json['icon']),
+      color: parseColor(json['color'] ?? '#000000'),
+      description: json['description'] ?? '',
+      emoji: json['emoji'] ?? '',
+      isSelected: false,
+    );
+  }
 }
 
 class ChooseSportsPage extends StatefulWidget {
@@ -42,7 +76,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
   late Animation<double> _fadeAnimation;
 
   List<Sport> _sports = [];
-  Set<String> _selectedSportIds = {};
+  Set<int> _selectedSportIds = {}; // Changed from Set<String> to Set<int>
 
   @override
   void initState() {
@@ -68,53 +102,80 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
     _fadeController.forward();
   }
 
-  void _initializeSports() {
+  void _initializeSports() async {
+    try {
+      final sportsData = await ApiService.getSports();
+      setState(() {
+        _sports = sportsData.map((data) => Sport.fromJson(data)).toList();
+
+        // Load user's already selected sports
+        _loadUserPreferences();
+      });
+    } catch (e) {
+      print('Error loading sports: $e');
+      // Fallback to hardcoded sports
+      _loadHardcodedSports();
+    }
+  }
+
+  void _loadHardcodedSports() {
     _sports = [
       Sport(
-        id: 'football',
+        id: 1,
         name: 'Football',
         icon: Icons.sports_soccer,
         color: primaryGreen,
         emoji: '⚽',
         description: 'The beautiful game loved by billions worldwide',
-        popularLeagues: [
-          'Premier League',
-          'La Liga',
-          'Champions League',
-          'World Cup',
-        ],
       ),
       Sport(
-        id: 'basketball',
+        id: 2,
         name: 'Basketball',
         icon: Icons.sports_basketball,
-        color: Colors.orange[700]!,
+        color: Colors.orange.shade700,
         emoji: '🏀',
         description: 'Fast-paced action on the hardwood court',
-        popularLeagues: ['NBA', 'EuroLeague', 'Liga ACB', 'FIBA World Cup'],
       ),
       Sport(
-        id: 'tennis',
+        id: 3,
         name: 'Tennis',
         icon: Icons.sports_tennis,
-        color: Colors.yellow[800]!,
+        color: Colors.yellow.shade800,
         emoji: '🎾',
         description: 'Elite individual competition on various surfaces',
-        popularLeagues: ['ATP Tour', 'WTA Tour', 'Grand Slams', 'Davis Cup'],
       ),
       Sport(
-        id: 'volleyball',
+        id: 4,
         name: 'Volleyball',
         icon: Icons.sports_volleyball,
-        color: Colors.blue[700]!,
+        color: Colors.blue.shade700,
         emoji: '🏐',
         description: 'Exciting team sport with powerful spikes and digs',
-        popularLeagues: ['Serie A', 'PlusLiga', 'V.League', 'Nations League'],
       ),
     ];
   }
 
-  void _toggleSport(Sport sport) {
+  void _loadUserPreferences() async {
+    try {
+      final userSports = await ApiService.getUserSports();
+      final userSportIds = userSports
+          .map((s) => s['id'] is String ? int.parse(s['id']) : s['id'] as int)
+          .toList();
+
+      setState(() {
+        for (var sport in _sports) {
+          sport.isSelected = userSportIds.contains(sport.id);
+          if (sport.isSelected) {
+            _selectedSportIds.add(sport.id);
+          }
+        }
+      });
+    } catch (e) {
+      print('Error loading user preferences: $e');
+    }
+  }
+
+  void _toggleSport(Sport sport) async {
     setState(() {
       if (_selectedSportIds.contains(sport.id)) {
         _selectedSportIds.remove(sport.id);
@@ -124,6 +185,20 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
         sport.isSelected = true;
       }
     });
+
+    // Save to backend
+    try {
+      await ApiService.saveSportsPreferences(_selectedSportIds.toList());
+    } catch (e) {
+      print('Error saving preferences: $e');
+      // Show error snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to save preferences: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _selectAll() {
@@ -872,7 +947,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                     alignment: Alignment.center,
                     children: [
                       Icon(
-                        sport.icon,
+                        sport.icon ?? Icons.sports, // Added null check
                         color: isSelected
                             ? sport.color
                             : scheme.onSurfaceVariant,
@@ -948,11 +1023,13 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 12),
-                      // Popular Leagues
+                      // Popular Leagues - using hardcoded examples since not in model
                       Wrap(
                         spacing: 6,
                         runSpacing: 6,
-                        children: sport.popularLeagues.take(3).map((league) {
+                        children: _getPopularLeaguesForSport(sport).map((
+                          league,
+                        ) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
@@ -986,6 +1063,22 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
         ),
       ),
     );
+  }
+
+  // Helper method to get popular leagues for each sport
+  List<String> _getPopularLeaguesForSport(Sport sport) {
+    switch (sport.name.toLowerCase()) {
+      case 'football':
+        return ['Premier League', 'La Liga', 'Champions League'];
+      case 'basketball':
+        return ['NBA', 'EuroLeague', 'WNBA'];
+      case 'tennis':
+        return ['Wimbledon', 'US Open', 'Australian Open'];
+      case 'volleyball':
+        return ['FIVB', 'AVP', 'NCAA'];
+      default:
+        return ['Major League', 'Professional', 'International'];
+    }
   }
 
   Widget _buildSportCardMobile(
@@ -1041,7 +1134,7 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                         alignment: Alignment.center,
                         children: [
                           Icon(
-                            sport.icon,
+                            sport.icon ?? Icons.sports, // Added null check
                             color: isSelected
                                 ? sport.color
                                 : scheme.onSurfaceVariant,
@@ -1137,7 +1230,9 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: sport.popularLeagues.map((league) {
+                        children: _getPopularLeaguesForSport(sport).map((
+                          league,
+                        ) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
@@ -1211,11 +1306,10 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                               margin: const EdgeInsets.only(right: 8),
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: sport.color.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
-                                sport.icon,
+                                sport.icon ?? Icons.sports,
                                 color: sport.color,
                                 size: 20,
                               ),
@@ -1256,13 +1350,27 @@ class _ChooseSportsPageState extends State<ChooseSportsPage>
                 // Continue button
                 ElevatedButton(
                   onPressed: _selectedSportIds.isNotEmpty
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const FollowTeamsPage(),
-                            ),
-                          );
+                      ? () async {
+                          try {
+                            // Save final selection
+                            await ApiService.saveSportsPreferences(
+                              _selectedSportIds.toList(),
+                            );
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const FollowTeamsPage(),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error: $e'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

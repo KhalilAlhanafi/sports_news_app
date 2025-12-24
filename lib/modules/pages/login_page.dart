@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sports_news_app/modules/pages/forgot_password_page.dart';
 import 'package:sports_news_app/modules/pages/register_page.dart';
 import 'package:sports_news_app/widget_tree.dart';
+import 'package:sports_news_app/services/api_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -64,23 +65,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
 
-      await Future.delayed(const Duration(seconds: 2));
+    try {
+      final response = await ApiService.login(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-      setState(() {
-        _isLoading = false;
-      });
-
+      // Get user data
+      final user = await ApiService.getUser();
+      
+      // Navigate to main app
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const WidgetTree()),
       );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {

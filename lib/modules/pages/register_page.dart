@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sports_news_app/modules/pages/choose_sports_page.dart';
 import 'package:sports_news_app/modules/pages/login_page.dart';
+import 'package:sports_news_app/services/api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -68,33 +69,46 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   Future<void> _register() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
 
-      await Future.delayed(const Duration(seconds: 2));
+    try {
+      final response = await ApiService.register(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-      setState(() {
-        _isLoading = false;
-      });
-
+      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Account created successfully',
-            textAlign: TextAlign.center,
-          ),
+          content: const Text('Account created successfully!'),
           backgroundColor: primaryGreen,
         ),
       );
 
+      // Navigate to sports selection
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const ChooseSportsPage()),
       );
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
