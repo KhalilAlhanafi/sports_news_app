@@ -498,7 +498,10 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
     );
   }
 
-  Widget _buildResponsiveLayout(BoxConstraints constraints, ColorScheme scheme) {
+  Widget _buildResponsiveLayout(
+    BoxConstraints constraints,
+    ColorScheme scheme,
+  ) {
     final width = constraints.maxWidth;
     final isDesktop = width > 1024;
     final isTablet = width > 600 && width <= 1024;
@@ -697,7 +700,10 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                 ),
                 Text(
                   'Leagues Following',
-                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 14),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -743,7 +749,10 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                 const SizedBox(height: 2),
                 Text(
                   '$following of $total',
-                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -803,10 +812,12 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
               color: isCompleted
                   ? primaryGreen
                   : isActive
-                      ? primaryGreen.withOpacity(0.2)
-                      : scheme.surfaceVariant,
+                  ? primaryGreen.withOpacity(0.2)
+                  : scheme.surfaceVariant,
               shape: BoxShape.circle,
-              border: isActive ? Border.all(color: primaryGreen, width: 2) : null,
+              border: isActive
+                  ? Border.all(color: primaryGreen, width: 2)
+                  : null,
             ),
             child: Center(
               child: isCompleted
@@ -814,7 +825,9 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                   : Text(
                       '$step',
                       style: TextStyle(
-                        color: isActive ? primaryGreen : scheme.onSurfaceVariant,
+                        color: isActive
+                            ? primaryGreen
+                            : scheme.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -1099,7 +1112,11 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
             scheme,
           ),
           _buildTabItem(
-              Icons.sports_tennis, 'Tennis', _tennisLeagues.length, scheme),
+            Icons.sports_tennis,
+            'Tennis',
+            _tennisLeagues.length,
+            scheme,
+          ),
           _buildTabItem(
             Icons.sports_volleyball,
             'Volleyball',
@@ -1111,7 +1128,12 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
     );
   }
 
-  Widget _buildTabItem(IconData icon, String label, int count, ColorScheme scheme) {
+  Widget _buildTabItem(
+    IconData icon,
+    String label,
+    int count,
+    ColorScheme scheme,
+  ) {
     return Tab(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1127,8 +1149,10 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                 color: scheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text('$count',
-                  style: TextStyle(fontSize: 12, color: scheme.onSurface)),
+              child: Text(
+                '$count',
+                style: TextStyle(fontSize: 12, color: scheme.onSurface),
+              ),
             ),
         ],
       ),
@@ -1185,7 +1209,9 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                       Text(
                         'Select leagues to get personalized news and updates',
                         style: TextStyle(
-                            fontSize: 14, color: scheme.onSurfaceVariant),
+                          fontSize: 14,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -1234,13 +1260,27 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildLeaguesList(_filteredLeagues, scheme, isDesktop: isDesktop),
-                _buildLeaguesList(_footballLeagues, scheme, isDesktop: isDesktop),
-                _buildLeaguesList(_basketballLeagues, scheme,
-                    isDesktop: isDesktop),
+                _buildLeaguesList(
+                  _filteredLeagues,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
+                _buildLeaguesList(
+                  _footballLeagues,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
+                _buildLeaguesList(
+                  _basketballLeagues,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
                 _buildLeaguesList(_tennisLeagues, scheme, isDesktop: isDesktop),
-                _buildLeaguesList(_volleyballLeagues, scheme,
-                    isDesktop: isDesktop),
+                _buildLeaguesList(
+                  _volleyballLeagues,
+                  scheme,
+                  isDesktop: isDesktop,
+                ),
               ],
             ),
           ),
@@ -1253,22 +1293,40 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
     return TabBarView(
       controller: _tabController,
       children: [
-        _buildLeaguesGrid(_filteredLeagues, scheme,
-            crossAxisCount: crossAxisCount),
-        _buildLeaguesGrid(_footballLeagues, scheme,
-            crossAxisCount: crossAxisCount),
-        _buildLeaguesGrid(_basketballLeagues, scheme,
-            crossAxisCount: crossAxisCount),
-        _buildLeaguesGrid(_tennisLeagues, scheme,
-            crossAxisCount: crossAxisCount),
-        _buildLeaguesGrid(_volleyballLeagues, scheme,
-            crossAxisCount: crossAxisCount),
+        _buildLeaguesGrid(
+          _filteredLeagues,
+          scheme,
+          crossAxisCount: crossAxisCount,
+        ),
+        _buildLeaguesGrid(
+          _footballLeagues,
+          scheme,
+          crossAxisCount: crossAxisCount,
+        ),
+        _buildLeaguesGrid(
+          _basketballLeagues,
+          scheme,
+          crossAxisCount: crossAxisCount,
+        ),
+        _buildLeaguesGrid(
+          _tennisLeagues,
+          scheme,
+          crossAxisCount: crossAxisCount,
+        ),
+        _buildLeaguesGrid(
+          _volleyballLeagues,
+          scheme,
+          crossAxisCount: crossAxisCount,
+        ),
       ],
     );
   }
 
-  Widget _buildLeaguesList(List<League> leagues, ColorScheme scheme,
-      {required bool isDesktop}) {
+  Widget _buildLeaguesList(
+    List<League> leagues,
+    ColorScheme scheme, {
+    required bool isDesktop,
+  }) {
     if (leagues.isEmpty) {
       return _buildEmptyState(scheme);
     }
@@ -1338,7 +1396,9 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                 runSpacing: 16,
                 children: groupLeagues.map((league) {
                   return SizedBox(
-                      width: 360, child: _buildLeagueCard(league, scheme));
+                    width: 360,
+                    child: _buildLeagueCard(league, scheme),
+                  );
                 }).toList(),
               )
             else
@@ -1414,9 +1474,7 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                   decoration: BoxDecoration(
                     color: sportColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: sportColor.withOpacity(0.3),
-                    ),
+                    border: Border.all(color: sportColor.withOpacity(0.3)),
                   ),
                   child: Center(
                     child: Text(
@@ -1434,15 +1492,19 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              league.name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: isFollowing
-                                    ? sportColor
-                                    : scheme.onSurface,
-                                overflow: TextOverflow.ellipsis,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                league.name,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: isFollowing
+                                      ? sportColor
+                                      : scheme.onSurface,
+                                ),
                               ),
                             ),
                           ),
@@ -1517,10 +1579,7 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
                             decoration: BoxDecoration(
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(25),
-                              border: Border.all(
-                                color: sportColor,
-                                width: 1.5,
-                              ),
+                              border: Border.all(color: sportColor, width: 1.5),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -1637,8 +1696,11 @@ class _FollowLeaguesPageState extends State<FollowLeaguesPage>
               color: scheme.surfaceVariant,
               shape: BoxShape.circle,
             ),
-            child:
-                Icon(Icons.search_off, size: 48, color: scheme.onSurfaceVariant),
+            child: Icon(
+              Icons.search_off,
+              size: 48,
+              color: scheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 24),
           Text(
